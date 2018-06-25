@@ -1,6 +1,7 @@
 package com.pro.vyas.pranav.popularmovies.RecyclerUtils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,21 +11,28 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.pro.vyas.pranav.popularmovies.DetailActivity;
 import com.pro.vyas.pranav.popularmovies.Models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import static com.pro.vyas.pranav.popularmovies.MainActivity.base_url;
-
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 {
 
+    public static final String KEY_POSTER_PATH = "poster_path";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_GENRE = "genre";
+    public static final String KEY_VOTE_AVERAGE = "votes";
+    public static final String KEY_RATING = "rating";
+    public static final String KEY_OVERVIEW = "synposis";
+    public static final String KEY_RELEASE_DATE = "releaseDate";
+
+
     private static final String TAG = "MovieAdapter";
-    Context ct;
-    List<String> titles;
-    List<MovieModel> movie;
+    private Context ct;
+    private List<MovieModel> movie;
     private static final String baseUrlPoster = "http://image.tmdb.org/t/p/w185/";
 
     public MovieAdapter(Context ct,List<MovieModel> movie) {
@@ -47,14 +55,38 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         holder.tvGenre.setText("");
         for (int i = 0; i < movie.get(position).getGenre_ids().size(); i++){
             holder.tvGenre.append(movie.get(position).getGenre_ids().get(i) + " ,");
-            Log.d(TAG, "onBindViewHolder: Size of genre is "+movie.get(position).getGenre_ids().get(i));
         }
-        Log.d(TAG, "onBindViewHolder: Poster PAth is "+baseUrlPoster+movie.get(position).getPoster_path());
         Picasso.get()
                 .load(baseUrlPoster+movie.get(position).getPoster_path())
                 .placeholder(R.drawable.ic_launcher_foreground)
                 .error(R.drawable.ic_ticketlower)
                 .into(holder.ivPoster);
+
+        final int pos = position;
+
+        holder.ivPoster.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ct, DetailActivity.class);
+                intent.putExtra(KEY_POSTER_PATH,baseUrlPoster+movie.get(pos).getPoster_path());
+                intent.putExtra(KEY_TITLE,movie.get(pos).getTitle());
+                intent.putExtra(KEY_GENRE,movie.get(pos).getGenre_ids().toArray());
+                intent.putExtra(KEY_RELEASE_DATE,movie.get(pos).getRelease_date());
+                Log.d(TAG, "onClick: Release Date is "+movie.get(pos).getRelease_date());
+                //Log.d(TAG, "onClick: Genre is ");
+                intent.putExtra(KEY_VOTE_AVERAGE,movie.get(pos).getVote_average());
+                intent.putExtra(KEY_RATING,movie.get(pos).getVote_count());
+                intent.putExtra(KEY_OVERVIEW,movie.get(pos).getOverview());
+                ct.startActivity(intent);
+            }
+        });
+
+        holder.tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override

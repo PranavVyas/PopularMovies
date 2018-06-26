@@ -14,11 +14,15 @@ import android.widget.TextView;
 
 import com.pro.vyas.pranav.popularmovies.DetailActivity;
 import com.pro.vyas.pranav.popularmovies.ExtraUtils.Converter;
+import com.pro.vyas.pranav.popularmovies.MainActivity;
 import com.pro.vyas.pranav.popularmovies.Models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.pro.vyas.pranav.popularmovies.MainActivity.currPage;
 
@@ -71,9 +75,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
         final int pos = position;
 
-        holder.ivPoster.setOnClickListener(new View.OnClickListener() {
+        View.OnClickListener listener = new View.OnClickListener(){
             @Override
-            public void onClick(View v) {
+            public void onClick(View v){
                 Intent intent = new Intent(ct, DetailActivity.class);
                 intent.putExtra(KEY_POSTER_PATH,baseUrlPoster+movie.get(pos).getPoster_path());
                 intent.putExtra(KEY_TITLE,movie.get(pos).getTitle());
@@ -88,14 +92,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
                 intent.putExtra(KEY_OVERVIEW,movie.get(pos).getOverview());
                 ct.startActivity(intent);
             }
-        });
+        };
 
-        holder.tvTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        holder.ivPoster.setOnClickListener(listener);
+        holder.tvTitle.setOnClickListener(listener);
+        holder.tvGenre.setOnClickListener(listener);
+        holder.ivmovieUppar.setOnClickListener(listener);
+        holder.ivmovieLower.setOnClickListener(listener);
     }
 
     @Override
@@ -108,6 +111,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         TextView tvGenre;
         ImageView ivPoster;
         TextView tvCount;
+        ImageView ivmovieUppar;
+        ImageView ivmovieLower;
+
         public MovieHolder(View itemView) {
             super(itemView);
 
@@ -115,6 +121,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             tvGenre = itemView.findViewById(R.id.text_genre_recycler);
             ivPoster = itemView.findViewById(R.id.image_movie_poster_recycler);
             tvCount = itemView.findViewById(R.id.text_count);
+            ivmovieLower = itemView.findViewById(R.id.image_movie_lower_recycler);
+            ivmovieUppar = itemView.findViewById(R.id.image_movie_uppar_recycler);
+
         }
     }
 }

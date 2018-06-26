@@ -1,33 +1,30 @@
 package com.pro.vyas.pranav.popularmovies.PrefencesUtils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 public class SharedPrefenceUtils {
 
-    Context context;
-    SharedPreferences mPrefs;
-    SharedPreferences.Editor editor;
+    private SharedPreferences mPrefs;
+    private SharedPreferences.Editor editor;
     private static final String KEY_FIRST_RUN = "first_time_run";
 
-    public SharedPrefenceUtils(Context context,SharedPreferences mPrefs) {
-        this.context = context;
+    public SharedPrefenceUtils(SharedPreferences mPrefs) {
         this.mPrefs = mPrefs;
         editor = mPrefs.edit();
+        editor.apply();
     }
 
     public boolean isFirstTimeRun(){
-        if (mPrefs.getInt(KEY_FIRST_RUN, 0) == 0) return true;
-        else return false;
+        return mPrefs.getInt(KEY_FIRST_RUN, 0) == 0;
     }
 
     public void setFirstTimeRun(boolean firstRun){
-        if(firstRun == false){
+        if(!firstRun){
             editor.putInt(KEY_FIRST_RUN, 1);
-            editor.commit();
+            editor.apply();
         }else {
             editor.putInt(KEY_FIRST_RUN, 0);
-            editor.commit();
+            editor.apply();
         }
     }
 

@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     public static RecyclerView rvMain;
     public static TextView tvData;
     private static AVLoadingIndicatorView loadingIndicatorView;
+    private static ImageView ivBackgroundProgress;
+    private static TextView tvProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
         tvData = findViewById(R.id.text_details_main);
         rvMain = findViewById(R.id.rv_main);
-        //progressBar = findViewById(R.id.progressBar);
+        tvProgress = findViewById(R.id.text_progress);
+        ivBackgroundProgress = findViewById(R.id.image_backgroundProgress_main);
         loadingIndicatorView = findViewById(R.id.LoadingIndicator);
 
         currPage = 1;
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void fetchDataFromUrl(String sortBy, final String pageNo){
         loadingIndicatorView.smoothToShow();
+        ivBackgroundProgress.setVisibility(View.VISIBLE);
+        tvProgress.setVisibility(View.VISIBLE);
         String[] array = {sortBy,pageNo};
         LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this);
         loadMovie.execute(array);
@@ -138,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 .attachTo(actionButton)
                 .build();
         actionButton.showContextMenu();
-        final SharedPrefenceUtils sharedPrefenceUtils = new SharedPrefenceUtils(this,mainPrefs);
+        final SharedPrefenceUtils sharedPrefenceUtils = new SharedPrefenceUtils(mainPrefs);
 
         if(sharedPrefenceUtils.isFirstTimeRun()){
             Display display = getWindowManager().getDefaultDisplay();
@@ -186,8 +191,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
-        //progressBar.setVisibility(View.INVISIBLE);
         loadingIndicatorView.smoothToHide();
+        ivBackgroundProgress.setVisibility(View.GONE);
+        tvProgress.setVisibility(View.GONE);
     }
 
     @Override

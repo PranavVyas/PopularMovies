@@ -1,12 +1,13 @@
 package com.pro.vyas.pranav.popularmovies;
 
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.pro.vyas.pranav.popularmovies.RecyclerUtils.MovieAdapter;
+import com.pro.vyas.pranav.popularmovies.ExtraUtils.Converter;
 import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
@@ -28,24 +29,30 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-
         ButterKnife.bind(this);
+
+        ActionBar actionBar = getSupportActionBar();
+        if(actionBar != null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
 
         Intent intent = getIntent();
         if(intent.hasExtra(KEY_TITLE)){
             tvTitle.setText(intent.getStringExtra(KEY_TITLE));
+            actionBar.setTitle(intent.getStringExtra(KEY_TITLE));
         }
         if(intent.hasExtra(KEY_RELEASE_DATE)){
             tvRelease.setText(intent.getStringExtra(KEY_RELEASE_DATE));
         }
         if(intent.hasExtra(KEY_GENRE)){
-            tvGenre.setText(intent.getStringExtra(KEY_GENRE));
+            Converter converter = new Converter();
+            converter.Convert(DetailActivity.this,intent.getStringArrayExtra(KEY_GENRE),tvGenre);
         }
         if(intent.hasExtra(KEY_VOTE_AVERAGE)){
-            tvRating.setText(intent.getStringExtra(KEY_VOTE_AVERAGE));
+            tvRating.setText("IMDB Rating :\n"+intent.getStringExtra(KEY_VOTE_AVERAGE));
         }
         if(intent.hasExtra(KEY_RATING)){
-            tvTotalVotes.setText(intent.getStringExtra(KEY_RATING));
+            tvTotalVotes.setText("Total Votes :\n"+intent.getStringExtra(KEY_RATING));
         }
         if(intent.hasExtra(KEY_OVERVIEW)){
             tvSynopsis.setText(intent.getStringExtra(KEY_OVERVIEW));
@@ -53,8 +60,8 @@ public class DetailActivity extends AppCompatActivity {
         if(intent.hasExtra(KEY_POSTER_PATH)){
             Picasso.get()
                     .load(intent.getStringExtra(KEY_POSTER_PATH))
-                    .placeholder(R.drawable.ic_launcher_foreground)
-                    .error(R.drawable.ic_ticketlower)
+                    .placeholder(R.drawable.ic_loading)
+                    .error(R.drawable.ic_loading)
                     .into(ivPoster);
         }
     }

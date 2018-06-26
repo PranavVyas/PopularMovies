@@ -2,6 +2,7 @@ package com.pro.vyas.pranav.popularmovies.RecyclerUtils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,11 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pro.vyas.pranav.popularmovies.DetailActivity;
+import com.pro.vyas.pranav.popularmovies.ExtraUtils.Converter;
 import com.pro.vyas.pranav.popularmovies.Models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
+import static com.pro.vyas.pranav.popularmovies.MainActivity.currPage;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 {
@@ -53,13 +57,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         //holder.tv.setText(titles.get(position));
         holder.tvTitle.setText(movie.get(position).getTitle());
         holder.tvGenre.setText("");
-        for (int i = 0; i < movie.get(position).getGenre_ids().size(); i++){
-            holder.tvGenre.append(movie.get(position).getGenre_ids().get(i) + " ,");
-        }
+        int count = ((currPage - 1)*10) + position + 1;
+        holder.tvCount.setText(count+"");
+
+        String Temparray[] = new String[movie.get(position).getGenre_ids().size()];
+        Converter converter = new Converter();
+        converter.Convert(ct,movie.get(position).getGenre_ids().toArray(Temparray),holder.tvGenre);
         Picasso.get()
                 .load(baseUrlPoster+movie.get(position).getPoster_path())
-                .placeholder(R.drawable.ic_launcher_foreground)
-                .error(R.drawable.ic_ticketlower)
+                .placeholder(R.drawable.ic_loading)
+                .error(R.drawable.ic_loading)
                 .into(holder.ivPoster);
 
         final int pos = position;
@@ -70,7 +77,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
                 Intent intent = new Intent(ct, DetailActivity.class);
                 intent.putExtra(KEY_POSTER_PATH,baseUrlPoster+movie.get(pos).getPoster_path());
                 intent.putExtra(KEY_TITLE,movie.get(pos).getTitle());
-                intent.putExtra(KEY_GENRE,movie.get(pos).getGenre_ids().toArray());
+                String str[] = new String[movie.get(pos).getGenre_ids().size()];
+                intent.putExtra(KEY_GENRE,movie.get(pos).getGenre_ids().toArray(str));
+                Log.d(TAG, "onClick: Array Length is "+movie.get(pos).getGenre_ids().toArray().length);
                 intent.putExtra(KEY_RELEASE_DATE,movie.get(pos).getRelease_date());
                 Log.d(TAG, "onClick: Release Date is "+movie.get(pos).getRelease_date());
                 //Log.d(TAG, "onClick: Genre is ");
@@ -98,12 +107,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         TextView tvTitle;
         TextView tvGenre;
         ImageView ivPoster;
+        TextView tvCount;
         public MovieHolder(View itemView) {
             super(itemView);
 
             tvTitle = itemView.findViewById(R.id.text_title_recycler);
             tvGenre = itemView.findViewById(R.id.text_genre_recycler);
             ivPoster = itemView.findViewById(R.id.image_movie_poster_recycler);
+            tvCount = itemView.findViewById(R.id.text_count);
         }
     }
 }

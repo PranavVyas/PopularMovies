@@ -1,18 +1,39 @@
 package com.pro.vyas.pranav.popularmovies;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.SweepGradient;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.AlertDialogLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.DownloadProgressListener;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
+import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
+import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.pro.vyas.pranav.popularmovies.AsyncTaskUtils.LoadMovieAsyncTask;
 import com.pro.vyas.pranav.popularmovies.Models.MainModel;
 import com.pro.vyas.pranav.popularmovies.Models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.RecyclerUtils.MovieAdapter;
@@ -22,18 +43,22 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.co.recruit_lifestyle.android.widget.WaveSwipeRefreshLayout;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private static final String TAG = "MainActivity";
-    public String base_url = "https://api.themoviedb.org/3/discover/movie";
+    public static String base_url = "https://api.themoviedb.org/3/discover/movie";
+    public static String sortByPopularity = "popularity.desc";
+    public static String sortByVotes = "vote_count.desc";
+    public static String sortByFinal = sortByPopularity;
+    public static int currPage = 1;
 
-    RecyclerView rvMain;
-    WaveSwipeRefreshLayout mLayout;
+    public static RecyclerView rvMain;
+    public static TextView tvData;
 
-    List<MovieModel> movie = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,65 +66,130 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         AndroidNetworking.initialize(getApplicationContext());
 
-        configureSwipeRefresh();
+        tvData = findViewById(R.id.text_details_main);
         rvMain = findViewById(R.id.rv_main);
-        fetchDataFromUrl("popularity.desc");
+        currPage = 1;
+        fetchDataFromUrl(sortByFinal,"1");
+        attachFloatingActionMenu();
     }
 
-    public void fetchDataFromUrl(String sortBy){
-        String KEY_SORT_BY = "sort_by";
-        String KEY_API_KEY = "api_key";
-        AndroidNetworking.post(base_url)
-                .addQueryParameter(KEY_SORT_BY,sortBy)
-                .addQueryParameter(KEY_API_KEY,getResources().getString(R.string.API_KEY_TMDB))
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        MainModel model = gson.fromJson(response.toString(),MainModel.class);
-                        movie = model.getResults();
-                        attachWithRecyclerView(movie,rvMain);
-                    }
+    public void fetchDataFromUrl(String sortBy, final String pageNo){
 
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "onError: "+anError.getErrorDetail());
-                        Toast.makeText(MainActivity.this, "Something Went Wrong Try Agin..", Toast.LENGTH_SHORT).show();
-                    }
-                });
+        String[] array = {sortBy,pageNo};
+        LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this);
+        loadMovie.execute(array);
     }
 
-    public void configureSwipeRefresh(){
-        mLayout = findViewById(R.id.main_swipe);
-        mLayout.setWaveColor(getResources().getColor(R.color.colorPrimary));
-        mLayout.setColorSchemeColors(Color.RED,Color.GREEN);
+    public void attachFloatingActionMenu(){
+        ImageView mainBtnIcon = new ImageView(this);
+        mainBtnIcon.setImageDrawable(getResources().getDrawable(android.R.drawable.ic_input_add));
 
-        mLayout.setOnRefreshListener(new WaveSwipeRefreshLayout.OnRefreshListener() {
+        FloatingActionButton actionButton = new FloatingActionButton.Builder(this)
+                .setContentView(mainBtnIcon)
+                .build();
+
+        SubActionButton.Builder itemBuilder = new SubActionButton.Builder(this);
+
+        SubActionButton sortBtn = addButton(getResources().getDrawable(R.drawable.ic_sort_by),this,itemBuilder);
+        SubActionButton backBtn = addButton(getResources().getDrawable(R.drawable.ic_arrow_back),this,itemBuilder);
+        SubActionButton refreshBtn = addButton(getResources().getDrawable(R.drawable.ic_loading),this,itemBuilder);
+        SubActionButton nextBtn = addButton(getResources().getDrawable(R.drawable.ic_arrow_right),this,itemBuilder);
+
+
+        sortBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onRefresh() {
-                new Task().execute();
+            public void onClick(View v) {
+                changeSortOrder();
             }
-
-            class Task extends AsyncTask<Void, Void, Void> {
-                @Override
-                protected Void doInBackground(Void... voids) {
-                    fetchDataFromUrl("vote_count.desc");
-                    return null;
-                }
-                @Override protected void onPostExecute(Void result) {
-                    mLayout.setRefreshing(false);
-                    super.onPostExecute(result);
+        });
+        backBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(currPage > 1){
+                    currPage--;
+                    fetchDataFromUrl(sortByFinal,String.valueOf(currPage));
+                }else{
+                    Toast.makeText(MainActivity.this, "Already At Page 1", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+        refreshBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fetchDataFromUrl(sortByFinal, (String.valueOf(currPage)));
+            }
+        });
+        nextBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currPage++;
+                fetchDataFromUrl(sortByFinal,String.valueOf(currPage));
+            }
+        });
+
+        FloatingActionMenu actionMenu = new FloatingActionMenu.Builder(this)
+                .addSubActionView(sortBtn)
+                .addSubActionView(backBtn)
+                .addSubActionView(refreshBtn)
+                .addSubActionView(nextBtn)
+                .attachTo(actionButton)
+                .build();
     }
 
-    public void attachWithRecyclerView(List<MovieModel> movieResult,RecyclerView recyclerView){
-        MovieAdapter adapter = new MovieAdapter(MainActivity.this, movieResult);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(MainActivity.this,2);
+    public SubActionButton addButton(Drawable drawable, final Context ct, SubActionButton.Builder builder){
+        ImageView btnImage = new ImageView(ct);
+        btnImage.setImageDrawable(drawable);
+        SubActionButton btn = builder.setContentView(btnImage).build();
+        return btn;
+    }
+
+    public static void attachWithRecyclerView(List<MovieModel> movieResult,RecyclerView recyclerView,Context context){
+        MovieAdapter adapter = new MovieAdapter(context, movieResult);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context,2);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()){
+            case R.id.sort_by_menu:
+                changeSortOrder();
+                return true;
+
+            default:
+                return false;
+        }
+    }
+
+    public void changeSortOrder(){
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setPositiveButton("Popularity", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fetchDataFromUrl(sortByPopularity,"1");
+                        sortByFinal = sortByPopularity;
+                        currPage = 1;
+                    }
+                })
+                .setNegativeButton("Votes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fetchDataFromUrl(sortByVotes,"1");
+                        sortByFinal = sortByVotes;
+                        currPage = 1;
+                    }
+                })
+                .setTitle("Sort Movies By ")
+                .create();
+        dialog.setCancelable(true);
+        dialog.show();
     }
 }

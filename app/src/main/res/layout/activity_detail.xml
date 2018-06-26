@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".DetailActivity">
 
     <ImageView
@@ -25,6 +26,7 @@
         android:layout_marginTop="8dp"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="@android:color/background_light"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,6 +42,7 @@
         android:layout_marginTop="32dp"
         android:text="Release Date"
         android:textAlignment="center"
+        android:textColor="@color/colorYello"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/text_title_detail"
         app:layout_constraintStart_toStartOf="@+id/text_title_detail"
@@ -51,37 +54,11 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/tag_release_detail"
         app:layout_constraintStart_toStartOf="@+id/tag_release_detail"
         app:layout_constraintTop_toBottomOf="@+id/tag_release_detail" />
-
-    <TextView
-        android:id="@+id/tag_indbrating_detail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:text="IMDB Rating"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toStartOf="@+id/tag_total_votes"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_poster_detail" />
-
-    <TextView
-        android:id="@+id/tag_total_votes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="8dp"
-        android:text="Total Votes"
-        android:textAlignment="center"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/tag_indbrating_detail"
-        app:layout_constraintTop_toTopOf="@+id/tag_indbrating_detail" />
 
     <TextView
         android:id="@+id/tag_synopsis_detail"
@@ -91,6 +68,8 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="Plot Synopsis"
+        android:textAlignment="center"
+        android:textColor="@color/colorYello"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -103,6 +82,7 @@
         android:layout_marginTop="24dp"
         android:text="Genre"
         android:textAlignment="center"
+        android:textColor="@color/colorYello"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/text_release_detail"
         app:layout_constraintStart_toStartOf="@+id/text_release_detail"
@@ -114,6 +94,7 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/tag_genre_detail"
         app:layout_constraintStart_toStartOf="@+id/tag_genre_detail"
@@ -123,35 +104,63 @@
         android:id="@+id/text_rating_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/button_rounded"
+        android:padding="4dp"
         android:text="TextView"
         android:textAlignment="center"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
-        android:textStyle="italic"
-        app:layout_constraintEnd_toEndOf="@+id/tag_indbrating_detail"
-        app:layout_constraintStart_toStartOf="@+id/tag_indbrating_detail"
-        app:layout_constraintTop_toBottomOf="@+id/tag_indbrating_detail" />
+        app:layout_constraintEnd_toStartOf="@+id/text_total_votes_detail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_poster_detail" />
 
     <TextView
         android:id="@+id/text_total_votes_detail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/button_rounded"
+        android:padding="4dp"
         android:text="TextView"
         android:textAlignment="center"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/tag_total_votes"
-        app:layout_constraintStart_toStartOf="@+id/tag_total_votes"
-        app:layout_constraintTop_toBottomOf="@+id/tag_total_votes" />
-
-    <TextView
-        android:id="@+id/text_synopsis_detail"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/text_rating_detail"
+        app:layout_constraintTop_toTopOf="@+id/text_rating_detail" />
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tag_synopsis_detail" />
+        app:layout_constraintTop_toBottomOf="@+id/tag_synopsis_detail">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_synopsis_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView"
+                android:textColor="#ffffff"
+                android:textSize="14sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tag_synopsis_detail" />
+        </LinearLayout>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>

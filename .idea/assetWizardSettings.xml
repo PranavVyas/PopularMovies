@@ -23,7 +23,7 @@
                                           <PersistentState>
                                             <option name="values">
                                               <map>
-                                                <entry key="scalingPercent" value="85" />
+                                                <entry key="scalingPercent" value="99" />
                                                 <entry key="trimmed" value="true" />
                                               </map>
                                             </option>
@@ -36,6 +36,7 @@
                                     <map>
                                       <entry key="backgroundImage" value="F:\Development\NanoDegree-Android_Developer\PopularMovies\app\src\main\res\drawable\transparent_background.xml" />
                                       <entry key="foregroundImage" value="C:\Users\Pro\Downloads\Untitled (10).svg" />
+                                      <entry key="legacyIconShape" value="CIRCLE" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -62,8 +63,8 @@
                         <option name="values">
                           <map>
                             <entry key="assetSourceType" value="FILE" />
-                            <entry key="outputName" value="ic_arrow_right" />
-                            <entry key="sourceFile" value="C:\Users\Pro\Downloads\arrow-right.svg" />
+                            <entry key="outputName" value="ic_page_no" />
+                            <entry key="sourceFile" value="C:\Users\Pro\Downloads\baseline-find_in_page-24px.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -2,8 +2,8 @@ package com.pro.vyas.pranav.popularmovies.AsyncTaskUtils;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
@@ -64,7 +64,8 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
                     @Override
                     public void onError(ANError anError) {
                         Log.d(TAG, "onError: "+anError.getErrorDetail());
-                        Toast.makeText(ct, "Something Went Wrong Try Agin..", Toast.LENGTH_SHORT).show();
+                        Snackbar sbar = Snackbar.make(MainActivity.tvData,"Network Unavailable",Snackbar.LENGTH_LONG);
+                        sbar.show();
                     }
                 });
         return null;

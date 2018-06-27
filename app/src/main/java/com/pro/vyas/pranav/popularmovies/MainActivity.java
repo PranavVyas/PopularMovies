@@ -47,9 +47,10 @@ public class MainActivity extends AppCompatActivity {
 
     public static RecyclerView rvMain;
     public static TextView tvData;
-    private static AVLoadingIndicatorView loadingIndicatorView;
-    private static ImageView ivBackgroundProgress;
-    private static TextView tvProgress;
+    public static AVLoadingIndicatorView loadingIndicatorView;
+    public static ImageView ivBackgroundProgress;
+    public static TextView tvProgress;
+    public static ImageView ivNoConnection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         tvProgress = findViewById(R.id.text_progress);
         ivBackgroundProgress = findViewById(R.id.image_backgroundProgress_main);
         loadingIndicatorView = findViewById(R.id.LoadingIndicator);
+        ivNoConnection = findViewById(R.id.image_no_connection);
+        ivNoConnection.setVisibility(View.GONE);
 
         currPage = 1;
         fetchDataFromUrl(sortByFinal,"1");
@@ -193,7 +196,8 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         loadingIndicatorView.smoothToHide();
         ivBackgroundProgress.setVisibility(View.GONE);
-        tvProgress.setVisibility(View.GONE);
+        //tvProgress.setVisibility(View.GONE);
+        ivNoConnection.setVisibility(View.GONE);
     }
 
     @Override
@@ -268,9 +272,5 @@ public class MainActivity extends AppCompatActivity {
 
         android.app.AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
-    }
-
-    public void startFirstTimeHInts(){
-
     }
 }

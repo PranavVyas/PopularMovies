@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.view.View;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
@@ -22,10 +23,14 @@ import java.util.List;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.attachWithRecyclerView;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.base_url;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.currPage;
+import static com.pro.vyas.pranav.popularmovies.MainActivity.ivBackgroundProgress;
+import static com.pro.vyas.pranav.popularmovies.MainActivity.ivNoConnection;
+import static com.pro.vyas.pranav.popularmovies.MainActivity.loadingIndicatorView;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.rvMain;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.sortByFinal;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.sortByPopularity;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.tvData;
+import static com.pro.vyas.pranav.popularmovies.MainActivity.tvProgress;
 
 public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
 
@@ -58,7 +63,9 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
                                 "\n+Current Page : "+currPage+"    +Current Sort : "+ ((sortByFinal == sortByPopularity) ? "Popularity" : "Total Votes")
                         );
                         movie = model.getResults();
+                        rvMain.setVisibility(View.VISIBLE);
                         attachWithRecyclerView(movie,rvMain,ct);
+                        tvProgress.setVisibility(View.GONE);
                     }
 
                     @Override
@@ -66,6 +73,12 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
                         Log.d(TAG, "onError: "+anError.getErrorDetail());
                         Snackbar sbar = Snackbar.make(MainActivity.tvData,"Network Unavailable",Snackbar.LENGTH_LONG);
                         sbar.show();
+                        tvData.setText("No Internet Connection!");
+                        loadingIndicatorView.smoothToHide();
+                        ivNoConnection.setVisibility(View.VISIBLE);
+                        ivBackgroundProgress.setVisibility(View.VISIBLE);
+                        tvProgress.setVisibility(View.VISIBLE);
+                        rvMain.setVisibility(View.INVISIBLE);
                     }
                 });
         return null;

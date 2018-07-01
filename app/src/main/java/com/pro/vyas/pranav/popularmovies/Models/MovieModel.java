@@ -5,13 +5,13 @@ import java.util.List;
 public class MovieModel {
 
     private String id;
-    private String vote_count,vote_average,title,popularity,poster_path,overview,release_date;
+    private String vote_count,vote_average,title,popularity,poster_path,overview,release_date,backdrop_path;
     private List<String> genre_ids;
 
     public MovieModel() {
     }
 
-    public MovieModel(String id, String vote_count, String vote_average, String title, String popularity, String poster_path, String overview, String release_date, List<String> genre_ids) {
+    public MovieModel(String id, String vote_count, String vote_average, String title, String popularity, String poster_path, String overview, String release_date, String backdrop_path, List<String> genre_ids) {
         this.id = id;
         this.vote_count = vote_count;
         this.vote_average = vote_average;
@@ -20,6 +20,7 @@ public class MovieModel {
         this.poster_path = poster_path;
         this.overview = overview;
         this.release_date = release_date;
+        this.backdrop_path = backdrop_path;
         this.genre_ids = genre_ids;
     }
 
@@ -85,6 +86,14 @@ public class MovieModel {
 
     public void setRelease_date(String release_date) {
         this.release_date = release_date;
+    }
+
+    public String getBackdrop_path() {
+        return backdrop_path;
+    }
+
+    public void setBackdrop_path(String backdrop_path) {
+        this.backdrop_path = backdrop_path;
     }
 
     public List<String> getGenre_ids() {

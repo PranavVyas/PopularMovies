@@ -1,5 +1,6 @@
 package com.pro.vyas.pranav.popularmovies.RecyclerUtils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
@@ -10,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.pro.vyas.pranav.popularmovies.DetailActivity;
 import com.pro.vyas.pranav.popularmovies.ExtraUtils.Converter;
 import com.pro.vyas.pranav.popularmovies.MainActivity;
@@ -24,24 +27,13 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.pro.vyas.pranav.popularmovies.ConstantUtils.Constants.*;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.currPage;
-
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 {
-
-    public static final String KEY_POSTER_PATH = "poster_path";
-    public static final String KEY_TITLE = "title";
-    public static final String KEY_GENRE = "genre";
-    public static final String KEY_VOTE_AVERAGE = "votes";
-    public static final String KEY_RATING = "rating";
-    public static final String KEY_OVERVIEW = "synposis";
-    public static final String KEY_RELEASE_DATE = "releaseDate";
-
-
     private static final String TAG = "MovieAdapter";
     private Context ct;
     private List<MovieModel> movie;
-    private static final String baseUrlPoster = "http://image.tmdb.org/t/p/w185/";
 
     public MovieAdapter(Context ct,List<MovieModel> movie) {
         this.ct = ct;
@@ -64,9 +56,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         int count = ((currPage - 1)*10) + position + 1;
         holder.tvCount.setText(count+"");
 
-        String Temparray[] = new String[movie.get(position).getGenre_ids().size()];
-        Converter converter = new Converter();
-        converter.Convert(ct,movie.get(position).getGenre_ids().toArray(Temparray),holder.tvGenre);
         Picasso.get()
                 .load(baseUrlPoster+movie.get(position).getPoster_path())
                 .placeholder(R.drawable.ic_loading)
@@ -79,17 +68,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(ct, DetailActivity.class);
-                intent.putExtra(KEY_POSTER_PATH,baseUrlPoster+movie.get(pos).getPoster_path());
-                intent.putExtra(KEY_TITLE,movie.get(pos).getTitle());
-                String str[] = new String[movie.get(pos).getGenre_ids().size()];
-                intent.putExtra(KEY_GENRE,movie.get(pos).getGenre_ids().toArray(str));
-                Log.d(TAG, "onClick: Array Length is "+movie.get(pos).getGenre_ids().toArray().length);
-                intent.putExtra(KEY_RELEASE_DATE,movie.get(pos).getRelease_date());
-                Log.d(TAG, "onClick: Release Date is "+movie.get(pos).getRelease_date());
-                //Log.d(TAG, "onClick: Genre is ");
-                intent.putExtra(KEY_VOTE_AVERAGE,movie.get(pos).getVote_average());
-                intent.putExtra(KEY_RATING,movie.get(pos).getVote_count());
-                intent.putExtra(KEY_OVERVIEW,movie.get(pos).getOverview());
+                Gson gson= new Gson();
+                intent.putExtra("MovieJSONString",gson.toJson(movie.get(pos)));
                 ct.startActivity(intent);
             }
         };
@@ -113,6 +93,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         TextView tvCount;
         ImageView ivmovieUppar;
         ImageView ivmovieLower;
+        ImageView ivPosterBack;
 
         public MovieHolder(View itemView) {
             super(itemView);
@@ -123,6 +104,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             tvCount = itemView.findViewById(R.id.text_count);
             ivmovieLower = itemView.findViewById(R.id.image_movie_lower_recycler);
             ivmovieUppar = itemView.findViewById(R.id.image_movie_uppar_recycler);
+            ivPosterBack = itemView.findViewById(R.id.image_backdrop_detail);
 
         }
     }

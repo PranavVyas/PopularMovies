@@ -28,9 +28,4 @@ public class SharedPrefenceUtils {
         }
     }
 
-    //
-    // SharedPreferences prefs =
-    //public boolean firsttimerun(){
-//
- //   }
 }

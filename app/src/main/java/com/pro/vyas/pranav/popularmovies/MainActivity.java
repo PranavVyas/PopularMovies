@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,14 +36,13 @@ import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
 
+import static com.pro.vyas.pranav.popularmovies.ConstantUtils.Constants.*;
+
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences mainPrefs;
 
     private static final String TAG = "MainActivity";
-    public static String base_url = "https://api.themoviedb.org/3/discover/movie";
-    public static String sortByPopularity = "popularity.desc";
-    public static String sortByVotes = "vote_count.desc";
     public static String sortByFinal = sortByPopularity;
     public static int currPage = 1;
 
@@ -66,19 +67,20 @@ public class MainActivity extends AppCompatActivity {
         ivBackgroundProgress = findViewById(R.id.image_backgroundProgress_main);
         loadingIndicatorView = findViewById(R.id.LoadingIndicator);
         ivNoConnection = findViewById(R.id.image_no_connection);
+
         ivNoConnection.setVisibility(View.GONE);
 
         currPage = 1;
-        fetchDataFromUrl(sortByFinal,"1");
+        fetchDataFromUrl("1");
         attachFloatingActionMenu();
 
     }
 
-    public void fetchDataFromUrl(String sortBy, final String pageNo){
+    public void fetchDataFromUrl(final String pageNo){
         loadingIndicatorView.smoothToShow();
         ivBackgroundProgress.setVisibility(View.VISIBLE);
         tvProgress.setVisibility(View.VISIBLE);
-        String[] array = {sortBy,pageNo};
+        String[] array = {pageNo};
         LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this);
         loadMovie.execute(array);
     }
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(currPage > 1){
                     currPage--;
-                    fetchDataFromUrl(sortByFinal,String.valueOf(currPage));
+                    fetchDataFromUrl(String.valueOf(currPage));
                 }else{
                     Toast.makeText(MainActivity.this, "Already At Page 1", Toast.LENGTH_SHORT).show();
                 }
@@ -119,14 +121,14 @@ public class MainActivity extends AppCompatActivity {
         refreshBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fetchDataFromUrl(sortByFinal, (String.valueOf(currPage)));
+                fetchDataFromUrl((String.valueOf(currPage)));
             }
         });
         nextBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currPage++;
-                fetchDataFromUrl(sortByFinal,String.valueOf(currPage));
+                fetchDataFromUrl(String.valueOf(currPage));
             }
         });
         chooseBtn.setOnClickListener(new View.OnClickListener() {
@@ -155,12 +157,12 @@ public class MainActivity extends AppCompatActivity {
             rect1.offset(display.getWidth() / 2, display.getHeight() / 2);
             TapTargetSequence sequence = new TapTargetSequence(MainActivity.this)
                     .targets(
-                            TapTarget.forView(actionButton,"Action Button","Introducing Action Button for quick Toggles...\nClick here now..."),
-                            TapTarget.forBounds(rect1,"Back Button","After touching Action Button \nTouch this to go back by 1 Page").icon(this.getResources().getDrawable(R.drawable.ic_arrow_back)).outerCircleColor(R.color.colorAccent),
-                            TapTarget.forBounds(rect1,"Next Button","After touching Action Button \nTouch this to go forward by 1 Page").icon(iconNext).outerCircleColor(R.color.colorYello).textColor(R.color.colorBlack),
-                            TapTarget.forBounds(rect1,"Refresh Button","After touching Action Button \nRefresh Page by this button").icon(this.getResources().getDrawable(R.drawable.ic_loading)).outerCircleColor(R.color.colorGreen).textColor(R.color.colorBlack),
-                            TapTarget.forBounds(rect1,"Sort By Button","After touching Action Button \nTouch this to change Sorting").icon(this.getResources().getDrawable(R.drawable.ic_sort_by)).outerCircleColor(R.color.colorSkyBlue).textColor(R.color.colorBlack),
-                            TapTarget.forBounds(rect1,"Change Page Button","After touching Action Button \nTouch this to jump to page directly").icon(this.getResources().getDrawable(R.drawable.ic_page_no)).outerCircleColor(R.color.colorRed).descriptionTextColor(R.color.colorBlack)
+                            TapTarget.forView(actionButton,INTRO_TITLE_ACTION_BUTTON,INTRO_DETAIL_ACTION_BUTTON),
+                            TapTarget.forBounds(rect1,INTRO_TITLE_BACK_BUTTON,INTRO_DETAIL_BACK_BUTTON).icon(this.getResources().getDrawable(R.drawable.ic_arrow_back)).outerCircleColor(R.color.colorAccent),
+                            TapTarget.forBounds(rect1,INTRO_TITLE_NEXT_BUTTON,INTRO_DETAIL_NEXT_BUTTON).icon(iconNext).outerCircleColor(R.color.colorYello).textColor(R.color.colorBlack),
+                            TapTarget.forBounds(rect1,INTRO_TITLE_REFRESH_BUTTON,INTRO_DETAIL_REFRESH_BUTTON).icon(this.getResources().getDrawable(R.drawable.ic_loading)).outerCircleColor(R.color.colorGreen).textColor(R.color.colorBlack),
+                            TapTarget.forBounds(rect1,INTRO_TITLE_SORT_BUTTON,INTRO_DETAIL_SORT_BUTTON).icon(this.getResources().getDrawable(R.drawable.ic_sort_by)).outerCircleColor(R.color.colorSkyBlue).textColor(R.color.colorBlack),
+                            TapTarget.forBounds(rect1,INTRO_TITLE_PAGE_NO_BUTTON,INTRO_DETAIL_PAGE_NO_BUTTON).icon(this.getResources().getDrawable(R.drawable.ic_page_no)).outerCircleColor(R.color.colorRed).descriptionTextColor(R.color.colorBlack)
             ).listener(new TapTargetSequence.Listener() {
                 @Override
                 public void onSequenceFinish() {
@@ -188,18 +190,6 @@ public class MainActivity extends AppCompatActivity {
         return btn;
     }
 
-    public static void attachWithRecyclerView(List<MovieModel> movieResult,RecyclerView recyclerView,Context context){
-        MovieAdapter adapter = new MovieAdapter(context, movieResult);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context,2);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-        loadingIndicatorView.smoothToHide();
-        ivBackgroundProgress.setVisibility(View.GONE);
-        //tvProgress.setVisibility(View.GONE);
-        ivNoConnection.setVisibility(View.GONE);
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_menu,menu);
@@ -223,16 +213,16 @@ public class MainActivity extends AppCompatActivity {
                 .setPositiveButton("Popularity", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fetchDataFromUrl(sortByPopularity,"1");
+                        fetchDataFromUrl("1");
                         sortByFinal = sortByPopularity;
                         currPage = 1;
                     }
                 })
-                .setNegativeButton("Votes", new DialogInterface.OnClickListener() {
+                .setNegativeButton("IMDB Rating", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        fetchDataFromUrl(sortByVotes,"1");
-                        sortByFinal = sortByVotes;
+                        fetchDataFromUrl("1");
+                        sortByFinal = sortByImdbRating;
                         currPage = 1;
                     }
                 })
@@ -255,9 +245,9 @@ public class MainActivity extends AppCompatActivity {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog,int id) {
                                 String result = userInput.getText().toString();
-                                if(result.length() != 0 && result != null && Integer.valueOf(result)>1000 && Integer.valueOf(result)<0){
+                                if(result.length() != 0 && result != null){
                                     currPage = Integer.valueOf(result);
-                                    fetchDataFromUrl(sortByFinal,result);
+                                    fetchDataFromUrl(result);
                                 }else{
                                     Toast.makeText(MainActivity.this, "Page No is Invalid", Toast.LENGTH_SHORT).show();
                                 }

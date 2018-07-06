@@ -6,99 +6,70 @@
     android:layout_height="wrap_content"
     tools:layout_editor_absoluteY="81dp">
 
-    <ImageView
+    <android.support.v7.widget.CardView
         android:id="@+id/image_movie_uppar_recycler"
         android:layout_width="175dp"
         android:layout_height="250dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toTopOf="@+id/image_movie_lower_recycler"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ticket_uppar" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
+        <ImageView
+            android:id="@+id/image_movie_poster_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:srcCompat="@color/colorAccent" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
         android:id="@+id/image_movie_lower_recycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
-        android:scaleType="fitXY"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/image_movie_uppar_recycler"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/image_movie_uppar_recycler"
-        app:layout_constraintTop_toBottomOf="@+id/image_movie_uppar_recycler"
-        app:srcCompat="@drawable/ticket_lower" />
-
-    <ImageView
-        android:id="@+id/image_movie_poster_recycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/image_movie_uppar_recycler"
-        app:layout_constraintEnd_toEndOf="@+id/image_movie_uppar_recycler"
-        app:layout_constraintStart_toStartOf="@+id/image_movie_uppar_recycler"
-        app:layout_constraintTop_toTopOf="@+id/image_movie_uppar_recycler"
-        app:srcCompat="@color/colorAccent" />
-
-    <TextView
-        android:id="@+id/text_title_recycler"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        app:layout_constraintEnd_toEndOf="@+id/image_movie_lower_recycler"
-        app:layout_constraintStart_toStartOf="@+id/image_movie_lower_recycler"
-        app:layout_constraintTop_toTopOf="@+id/image_movie_lower_recycler" />
-
-    <TextView
-        android:id="@+id/text_genre_recycler"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textSize="10sp"
-        app:layout_constraintBottom_toBottomOf="@+id/image_movie_lower_recycler"
-        app:layout_constraintEnd_toEndOf="@+id/image_movie_lower_recycler"
-        app:layout_constraintStart_toStartOf="@+id/image_movie_lower_recycler"
-        app:layout_constraintTop_toBottomOf="@+id/text_title_recycler" />
-
-    <ImageView
-        android:id="@+id/image_count"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="12dp"
-        android:scaleType="fitXY"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/image_movie_uppar_recycler"
         app:layout_constraintStart_toStartOf="@+id/image_movie_uppar_recycler"
-        app:layout_constraintTop_toBottomOf="@+id/image_movie_poster_recycler"
-        app:srcCompat="@drawable/button_rounded" />
+        app:layout_constraintTop_toBottomOf="@+id/image_movie_uppar_recycler">
 
-    <TextView
-        android:id="@+id/text_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@+id/image_count"
-        app:layout_constraintEnd_toEndOf="@+id/image_count"
-        app:layout_constraintStart_toStartOf="@+id/image_count"
-        app:layout_constraintTop_toTopOf="@+id/image_count" />
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraint_Movie_lower"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/text_title_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="TextView\nTitle\nHere"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/constraint_Movie_lower" />
+
+            <com.nex3z.flowlayout.FlowLayout
+                android:id="@+id/flowlayout_genre_recycler"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:text="TextView\nfdfdf"
+                android:textAlignment="center"
+                android:gravity="center"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@+id/constraint_Movie_lower"
+                app:layout_constraintEnd_toEndOf="@+id/text_title_recycler"
+                app:layout_constraintStart_toStartOf="@+id/text_title_recycler"
+                app:layout_constraintTop_toBottomOf="@+id/text_title_recycler" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+
 </android.support.constraint.ConstraintLayout>

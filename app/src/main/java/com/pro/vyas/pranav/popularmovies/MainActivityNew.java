@@ -1,18 +1,14 @@
 package com.pro.vyas.pranav.popularmovies;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.pro.vyas.pranav.popularmovies.RecyclerUtils.ViewPagerAdapter;
+import com.pro.vyas.pranav.popularmovies.recyclerUtils.ViewPagerAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

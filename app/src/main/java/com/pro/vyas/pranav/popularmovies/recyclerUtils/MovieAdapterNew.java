@@ -1,4 +1,4 @@
-package com.pro.vyas.pranav.popularmovies.RecyclerUtils;
+package com.pro.vyas.pranav.popularmovies.recyclerUtils;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

@@ -1,4 +1,4 @@
-package com.pro.vyas.pranav.popularmovies.Models;
+package com.pro.vyas.pranav.popularmovies.models;
 
 import java.util.List;
 

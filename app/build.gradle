@@ -49,5 +49,10 @@ dependencies {
     implementation 'com.fmsirvent:parallaxeverywhere:1.0.4'
     implementation 'com.nex3z:flow-layout:1.2.2'
 
+    //Navigation Library
+    implementation("com.mikepenz:materialdrawer:6.0.8@aar") {
+        transitive = true
+    }
+
 
 }

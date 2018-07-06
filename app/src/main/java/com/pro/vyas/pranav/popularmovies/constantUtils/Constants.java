@@ -1,12 +1,15 @@
-package com.pro.vyas.pranav.popularmovies.ConstantUtils;
+package com.pro.vyas.pranav.popularmovies.constantUtils;
 
 public class Constants {
+    public static final long SPLASH_TIME_OUT = 2000;
+
     public static final String baseUrlGenre = "https://api.themoviedb.org/3/genre/movie/list";
     public static final String baseUrlPoster = "http://image.tmdb.org/t/p/w185/";
     public static final String baseUrlPosterBackground = "http://image.tmdb.org/t/p/w342/";
 
     public static final String sortByPopularity = "http://api.themoviedb.org/3/movie/popular";
     public static final String sortByImdbRating = "http://api.themoviedb.org/3/movie/top_rated";
+    public static final String sortByUpcoming = "http://api.themoviedb.org/3/movie/upcoming";
 
 
     public static final String INTRO_TITLE_ACTION_BUTTON = "Action Button";

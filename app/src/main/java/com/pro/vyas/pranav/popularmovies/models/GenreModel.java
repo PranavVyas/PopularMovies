@@ -1,4 +1,4 @@
-package com.pro.vyas.pranav.popularmovies.Models;
+package com.pro.vyas.pranav.popularmovies.models;
 
 public class GenreModel {
     String id;

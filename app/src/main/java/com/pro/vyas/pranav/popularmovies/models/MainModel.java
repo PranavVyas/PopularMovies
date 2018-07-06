@@ -1,12 +1,7 @@
-package com.pro.vyas.pranav.popularmovies.Models;
-
-import android.support.annotation.NonNull;
+package com.pro.vyas.pranav.popularmovies.models;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class MainModel {
     int page;

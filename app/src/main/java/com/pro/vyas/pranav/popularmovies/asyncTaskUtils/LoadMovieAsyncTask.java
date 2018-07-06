@@ -1,4 +1,4 @@
-package com.pro.vyas.pranav.popularmovies.AsyncTaskUtils;
+package com.pro.vyas.pranav.popularmovies.asyncTaskUtils;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -13,10 +13,10 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.google.gson.Gson;
 import com.pro.vyas.pranav.popularmovies.MainActivity;
-import com.pro.vyas.pranav.popularmovies.Models.MainModel;
-import com.pro.vyas.pranav.popularmovies.Models.MovieModel;
+import com.pro.vyas.pranav.popularmovies.models.MainModel;
+import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
-import com.pro.vyas.pranav.popularmovies.RecyclerUtils.MovieAdapter;
+import com.pro.vyas.pranav.popularmovies.recyclerUtils.MovieAdapter;
 
 import org.json.JSONObject;
 
@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static com.pro.vyas.pranav.popularmovies.ConstantUtils.Constants.sortByPopularity;
+import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.sortByImdbRating;
+import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.sortByPopularity;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.currPage;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.ivBackgroundProgress;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.ivNoConnection;
@@ -59,7 +60,7 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
                         MainModel model = gson.fromJson(response.toString(),MainModel.class);
                         tvData.setText("+Total Result : "+model.getTotal_results()+
                                 "    +Total Pages : "+model.getTotal_pages()+
-                                "\n+Current Page : "+currPage+"    +Current Sort : "+ ((sortByFinal == sortByPopularity) ? "Popularity" : "IMDB Rating")
+                                "\n+Current Page : "+currPage+"    +Current Sort : "+ ((sortByFinal == sortByPopularity) ? "Popularity" : (sortByFinal == sortByImdbRating) ? "IMDB Rating" : "Upcoming")
                         );
                         movie = model.getResults();
                         rvMain.setVisibility(View.VISIBLE);
@@ -86,6 +87,7 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
     public void attachWithRecyclerView(List<MovieModel> movieResult, RecyclerView recyclerView, Context context){
         MovieAdapter adapter = new MovieAdapter(context, movieResult);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context,context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3);
+        //RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);

@@ -1,34 +1,31 @@
-package com.pro.vyas.pranav.popularmovies.RecyclerUtils;
+package com.pro.vyas.pranav.popularmovies.recyclerUtils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.nex3z.flowlayout.FlowLayout;
+import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadGenreAsyncTask;
 import com.pro.vyas.pranav.popularmovies.DetailActivity;
-import com.pro.vyas.pranav.popularmovies.ExtraUtils.Converter;
-import com.pro.vyas.pranav.popularmovies.MainActivity;
-import com.pro.vyas.pranav.popularmovies.Models.MovieModel;
+import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
+import com.robertlevonyan.views.chip.Chip;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.*;
 
-import static com.pro.vyas.pranav.popularmovies.ConstantUtils.Constants.*;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.currPage;
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 {
     private static final String TAG = "MovieAdapter";
@@ -50,19 +47,26 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     @Override
     public void onBindViewHolder(@NonNull MovieHolder holder, int position) {
-        //holder.tv.setText(titles.get(position));
         holder.tvTitle.setText(movie.get(position).getTitle());
-        holder.tvGenre.setText("");
-        int count = ((currPage - 1)*10) + position + 1;
-        holder.tvCount.setText(count+"");
 
         Picasso.get()
                 .load(baseUrlPoster+movie.get(position).getPoster_path())
-                .placeholder(R.drawable.ic_loading)
+                .placeholder(R.drawable.loading_new)
                 .error(R.drawable.ic_loading)
                 .into(holder.ivPoster);
-
         final int pos = position;
+        holder.flowGenre.removeAllViews();
+        //LoadGenreAsyncTask loadGenre = new LoadGenreAsyncTask(ct,movie.get(pos).getGenre_ids(),holder.flowGenre);
+        //loadGenre.execute();
+        Chip chip = new Chip(ct);
+        chip.setChipText(movie.get(position).getVote_average()+"/10");
+        chip.setHasIcon(true);
+        chip.setChipIcon(ct.getResources().getDrawable(R.drawable.ic_star_rounded));
+        chip.setTextColor(R.color.colorPrimary_text);
+        chip.setStrokeColor(R.color.colorBlue);
+        chip.setStrokeSize(4);
+        chip.changeBackgroundColor(ct.getResources().getColor(R.color.colorWhite));
+        holder.flowGenre.addView(chip);
 
         View.OnClickListener listener = new View.OnClickListener(){
             @Override
@@ -76,7 +80,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
         holder.ivPoster.setOnClickListener(listener);
         holder.tvTitle.setOnClickListener(listener);
-        holder.tvGenre.setOnClickListener(listener);
+        holder.flowGenre.setOnClickListener(listener);
         holder.ivmovieUppar.setOnClickListener(listener);
         holder.ivmovieLower.setOnClickListener(listener);
     }
@@ -88,24 +92,20 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     public class MovieHolder extends RecyclerView.ViewHolder{
         TextView tvTitle;
-        TextView tvGenre;
+        final FlowLayout flowGenre;
         ImageView ivPoster;
-        TextView tvCount;
-        ImageView ivmovieUppar;
-        ImageView ivmovieLower;
+        CardView ivmovieUppar;
+        CardView ivmovieLower;
         ImageView ivPosterBack;
 
         public MovieHolder(View itemView) {
             super(itemView);
-
             tvTitle = itemView.findViewById(R.id.text_title_recycler);
-            tvGenre = itemView.findViewById(R.id.text_genre_recycler);
+            flowGenre = itemView.findViewById(R.id.flowlayout_genre_recycler);
             ivPoster = itemView.findViewById(R.id.image_movie_poster_recycler);
-            tvCount = itemView.findViewById(R.id.text_count);
             ivmovieLower = itemView.findViewById(R.id.image_movie_lower_recycler);
             ivmovieUppar = itemView.findViewById(R.id.image_movie_uppar_recycler);
             ivPosterBack = itemView.findViewById(R.id.image_backdrop_detail);
-
         }
     }
 }

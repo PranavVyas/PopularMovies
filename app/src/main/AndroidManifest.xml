@@ -13,19 +13,23 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:launchMode="singleTop"
+            android:theme="@style/MaterialDrawerTheme.Light"><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
         <activity
             android:name=".DetailActivity"
             android:label="DetailActivity"
-            android:parentActivityName=".MainActivity"></activity>
-        <activity android:name=".MainActivityNew">
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".MainActivityNew" />
+        <activity android:name=".extraUtils.SplashActivity" >
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

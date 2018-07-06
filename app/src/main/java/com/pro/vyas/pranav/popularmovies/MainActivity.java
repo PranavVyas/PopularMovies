@@ -1,16 +1,17 @@
 package com.pro.vyas.pranav.popularmovies;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.constraint.ConstraintLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -18,29 +19,34 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-import com.pro.vyas.pranav.popularmovies.AsyncTaskUtils.LoadMovieAsyncTask;
-import com.pro.vyas.pranav.popularmovies.Models.MovieModel;
-import com.pro.vyas.pranav.popularmovies.PrefencesUtils.SharedPrefenceUtils;
-import com.pro.vyas.pranav.popularmovies.RecyclerUtils.MovieAdapter;
+import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadMovieAsyncTask;
+import com.pro.vyas.pranav.popularmovies.prefencesUtils.SharedPrefenceUtils;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.util.List;
-
-import static com.pro.vyas.pranav.popularmovies.ConstantUtils.Constants.*;
+import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
 
     SharedPreferences mainPrefs;
+    private Toolbar toolbarMain;
 
     private static final String TAG = "MainActivity";
     public static String sortByFinal = sortByPopularity;
@@ -52,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     public static ImageView ivBackgroundProgress;
     public static TextView tvProgress;
     public static ImageView ivNoConnection;
+    private TextView tvToolbarTitle;
+
+    Drawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +69,11 @@ public class MainActivity extends AppCompatActivity {
         AndroidNetworking.initialize(getApplicationContext());
 
         mainPrefs = getSharedPreferences("firsttimePrefs",Context.MODE_PRIVATE);
+        toolbarMain = findViewById(R.id.toolbar_main);
+        tvToolbarTitle = findViewById(R.id.text_toolbar_title_main);
+        tvToolbarTitle.setText("Home");
+        setSupportActionBar(toolbarMain);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         tvData = findViewById(R.id.text_details_main);
         rvMain = findViewById(R.id.rv_main);
@@ -72,8 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
         currPage = 1;
         fetchDataFromUrl("1");
+        buildDrawer(MainActivity.this,toolbarMain,getSupportActionBar());
         attachFloatingActionMenu();
-
     }
 
     public void fetchDataFromUrl(final String pageNo){
@@ -226,12 +240,97 @@ public class MainActivity extends AppCompatActivity {
                         currPage = 1;
                     }
                 })
+                .setNeutralButton("Upcoming Movies", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        fetchDataFromUrl("1");
+                        sortByFinal = sortByUpcoming;
+                        currPage = 1;
+                    }
+                })
                 .setTitle("Sort Movies By ")
                 .create();
         dialog.setCancelable(true);
         dialog.show();
     }
 
+    public void buildDrawer(final Activity context, Toolbar toolbar, final ActionBar actionbar){
+        new DrawerBuilder().withActivity(context).build();
+        PrimaryDrawerItem favouriteDrawer = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_favorites);
+//        favouriteDrawer.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+//            @Override
+//            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//                Toast.makeText(context,"Clicked Favorite Buton",Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
+        final PrimaryDrawerItem offlineDrawer = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_offline);
+//        offlineDrawer.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+//            @Override
+//            public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+//                Toast.makeText(context,"Clicked Offline Buton",Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
+//        });
+        AccountHeader aboutHeader = new AccountHeaderBuilder()
+                .withActivity(context)
+                .withHeaderBackground(R.drawable.background_detail_vector)
+                .addProfiles(
+                        new ProfileDrawerItem().withName("Movie-Mania").withEmail("provyas4399@gmail.com").withIcon(context.getResources().getDrawable(R.drawable.ic_launcher_foreground))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+        drawer = new DrawerBuilder()
+                .withActivity(context)
+                .withDisplayBelowStatusBar(true)
+                .withTranslucentStatusBar(true)
+                .withActionBarDrawerToggle(true)
+                .withAccountHeader(aboutHeader)
+                .withToolbar(toolbar)
+                .withActionBarDrawerToggleAnimated(true)
+                .addDrawerItems(
+                        favouriteDrawer,
+                        offlineDrawer,
+                        new DividerDrawerItem()
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        switch (position){
+                            case 1:
+                                Toast.makeText(context, "Clicked Favourite", Toast.LENGTH_SHORT).show();
+                                break;
+
+                            case 2:
+                                Toast.makeText(context, "Clicked Offline", Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                        return false;
+                    }
+                })
+                .build();
+        drawer.setOnDrawerNavigationListener(new Drawer.OnDrawerNavigationListener() {
+            @Override
+            public boolean onNavigationClickListener(View clickedView) {
+                if (drawer.isDrawerOpen()){
+                    drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
+                    actionbar.setDisplayHomeAsUpEnabled(true);
+                    Toast.makeText(context, "Is Closing", Toast.LENGTH_SHORT).show();
+                }else{
+                    actionbar.setDisplayHomeAsUpEnabled(false);
+                    drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
+                    Toast.makeText(context, "Is Opening", Toast.LENGTH_SHORT).show();
+                }
+                return false;
+            }
+        });
+    }
     public void choosePageNo(){
         LayoutInflater li = LayoutInflater.from(MainActivity.this);
         View chooseView = li.inflate(R.layout.choose_page_dialog, null);
@@ -262,5 +361,11 @@ public class MainActivity extends AppCompatActivity {
 
         android.app.AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen()){drawer.closeDrawer();}
+        else {super.onBackPressed();}
     }
 }

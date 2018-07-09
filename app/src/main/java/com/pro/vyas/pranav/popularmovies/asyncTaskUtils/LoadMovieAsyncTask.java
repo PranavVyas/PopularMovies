@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.error.ANError;
@@ -91,6 +92,35 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//                GridLayoutManager layoutManager=GridLayoutManager.class.cast(recyclerView.getLayoutManager());
+//                int visibleItemCount = layoutManager.getChildCount();
+//                int totalItemCount = layoutManager.getItemCount();
+//                int pastVisibleItems = layoutManager.findFirstCompletelyVisibleItemPosition();
+//
+//                if(pastVisibleItems+visibleItemCount >= totalItemCount){
+//                    // End of the list is here.
+//                    Toast.makeText(ct, "Scroll Ended", Toast.LENGTH_SHORT).show();
+//                    Log.i(TAG, "End of list");
+//
+//                }
+////                if(newState == RecyclerView.SCROLL_STATE_SETTLING){
+////                    Toast.makeText(ct, "Settlig", Toast.LENGTH_SHORT).show();}
+////                    else if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+////                    Toast.makeText(ct, "DRagging", Toast.LENGTH_SHORT).show();
+////                }else{
+////                    Toast.makeText(ct, "NOT SCrolling", Toast.LENGTH_SHORT).show();
+////                }
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//            }
+//        });
         loadingIndicatorView.smoothToHide();
         ivBackgroundProgress.setVisibility(View.GONE);
         ivNoConnection.setVisibility(View.GONE);

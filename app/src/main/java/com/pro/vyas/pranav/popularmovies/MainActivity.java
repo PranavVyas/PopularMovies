@@ -81,11 +81,10 @@ public class MainActivity extends AppCompatActivity {
         ivBackgroundProgress = findViewById(R.id.image_backgroundProgress_main);
         loadingIndicatorView = findViewById(R.id.LoadingIndicator);
         ivNoConnection = findViewById(R.id.image_no_connection);
-
         ivNoConnection.setVisibility(View.GONE);
-
         currPage = 1;
         fetchDataFromUrl("1");
+
         buildDrawer(MainActivity.this,toolbarMain,getSupportActionBar());
         attachFloatingActionMenu();
     }

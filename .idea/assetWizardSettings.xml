@@ -93,7 +93,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/toggle/ic_star_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/action/ic_bookmark_border_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -103,8 +103,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_star" />
-                            <entry key="sourceFile" value="C:\Users\Pro\Downloads\Development\Assets\colorfulBlurredBack.psd" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="movie_background_grey_marble" />
+                            <entry key="sourceFile" value="C:\Users\Pro\Downloads\Development\Assets\vectors\movie_background_grey_marble.svg" />
                           </map>
                         </option>
                       </PersistentState>

@@ -2,44 +2,22 @@ package com.pro.vyas.pranav.popularmovies.asyncTaskUtils;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.design.widget.Snackbar;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.ANRequest;
+import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.google.gson.Gson;
-import com.pro.vyas.pranav.popularmovies.MainActivity;
-import com.pro.vyas.pranav.popularmovies.models.MainModel;
-import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
-import com.pro.vyas.pranav.popularmovies.recyclerUtils.MovieAdapter;
+import com.pro.vyas.pranav.popularmovies.models.MainModel;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
-import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.sortByImdbRating;
-import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.sortByPopularity;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.currPage;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.ivBackgroundProgress;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.ivNoConnection;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.loadingIndicatorView;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.rvMain;
 import static com.pro.vyas.pranav.popularmovies.MainActivity.sortByFinal;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.tvData;
-import static com.pro.vyas.pranav.popularmovies.MainActivity.tvProgress;
 
-public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
+public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
 
-    List<MovieModel> movie = new ArrayList<>();
-    Context ct;
+    private MainModel model;
+    private Context ct;
 
     public LoadMovieAsyncTask(Context ctx) {
         this.ct = ctx;
@@ -47,85 +25,30 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, Void> {
 
     private static final String TAG = "LoadMovieAsyncTask";
     @Override
-    protected Void doInBackground(String... strings) {
+    protected MainModel doInBackground(String... strings) {
         String pageNo = strings[0];
         String KEY_API_KEY = "api_key";
-        AndroidNetworking.post(sortByFinal)
+        ANRequest requestMovie = AndroidNetworking.post(sortByFinal)
                 .addQueryParameter(KEY_API_KEY,ct.getResources().getString(R.string.API_KEY_TMDB))
                 .addQueryParameter("page",pageNo)
-                .build()
-                .getAsJSONObject(new JSONObjectRequestListener() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Gson gson = new Gson();
-                        MainModel model = gson.fromJson(response.toString(),MainModel.class);
-                        tvData.setText("+Total Result : "+model.getTotal_results()+
-                                "    +Total Pages : "+model.getTotal_pages()+
-                                "\n+Current Page : "+currPage+"    +Current Sort : "+ ((sortByFinal == sortByPopularity) ? "Popularity" : (sortByFinal == sortByImdbRating) ? "IMDB Rating" : "Upcoming")
-                        );
-                        movie = model.getResults();
-                        rvMain.setVisibility(View.VISIBLE);
-                        attachWithRecyclerView(movie,rvMain,ct);
-                        tvProgress.setVisibility(View.GONE);
-                    }
+                .build();
 
-                    @Override
-                    public void onError(ANError anError) {
-                        Log.d(TAG, "onError: "+anError.getErrorDetail());
-                        Snackbar sbar = Snackbar.make(MainActivity.tvData,"Network Unavailable",Snackbar.LENGTH_LONG);
-                        sbar.show();
-                        tvData.setText("No Internet Connection!");
-                        loadingIndicatorView.smoothToHide();
-                        ivNoConnection.setVisibility(View.VISIBLE);
-                        ivBackgroundProgress.setVisibility(View.VISIBLE);
-                        tvProgress.setVisibility(View.VISIBLE);
-                        rvMain.setVisibility(View.INVISIBLE);
-                    }
-                });
-        return null;
+        ANResponse response = requestMovie.executeForObject(MainModel.class);
+        if(response.isSuccess()){
+            model = (MainModel) response.getResult();
+        }else{
+            ANError error = response.getError();
+            Toast.makeText(ct, "Error is "+error.getErrorDetail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(ct, "Error Detail is "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, "doInBackground: Error Occured \nTitle : "+error.getErrorDetail()+"\nDetail: "+error.getMessage());
+        }
+        return model;
     }
 
-    public void attachWithRecyclerView(List<MovieModel> movieResult, RecyclerView recyclerView, Context context){
-        MovieAdapter adapter = new MovieAdapter(context, movieResult);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(context,context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3);
-        //RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3,StaggeredGridLayoutManager.VERTICAL);
-        recyclerView.setAdapter(adapter);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                GridLayoutManager layoutManager=GridLayoutManager.class.cast(recyclerView.getLayoutManager());
-//                int visibleItemCount = layoutManager.getChildCount();
-//                int totalItemCount = layoutManager.getItemCount();
-//                int pastVisibleItems = layoutManager.findFirstCompletelyVisibleItemPosition();
-//
-//                if(pastVisibleItems+visibleItemCount >= totalItemCount){
-//                    // End of the list is here.
-//                    Toast.makeText(ct, "Scroll Ended", Toast.LENGTH_SHORT).show();
-//                    Log.i(TAG, "End of list");
-//
-//                }
-////                if(newState == RecyclerView.SCROLL_STATE_SETTLING){
-////                    Toast.makeText(ct, "Settlig", Toast.LENGTH_SHORT).show();}
-////                    else if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-////                    Toast.makeText(ct, "DRagging", Toast.LENGTH_SHORT).show();
-////                }else{
-////                    Toast.makeText(ct, "NOT SCrolling", Toast.LENGTH_SHORT).show();
-////                }
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//            }
-//        });
-        loadingIndicatorView.smoothToHide();
-        ivBackgroundProgress.setVisibility(View.GONE);
-        ivNoConnection.setVisibility(View.GONE);
+    @Override
+    protected void onPostExecute(MainModel mainModel) {
+        super.onPostExecute(mainModel);
     }
-
 }
 
 

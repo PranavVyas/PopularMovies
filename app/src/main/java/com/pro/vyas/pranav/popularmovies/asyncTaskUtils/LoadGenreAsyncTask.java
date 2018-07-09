@@ -24,7 +24,7 @@ public class LoadGenreAsyncTask extends AsyncTask<Void,Void,List<String>> {
     private static final String TAG = "LoadGenreAsyncTask";
     Context context;
     private List<String> genreIds;
-    FlowLayout flowLayout;
+    private FlowLayout flowLayout;
     private List<String> names = new ArrayList<>();
     private List<String> ids = new ArrayList<>();
     private List<String> Genres = new ArrayList<>();

@@ -14,10 +14,7 @@
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
-            android:theme="@style/MaterialDrawerTheme.Light"><intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
+            android:theme="@style/MaterialDrawerTheme.Light">
         </activity>
         <activity
             android:name=".DetailActivity"
@@ -25,6 +22,10 @@
             android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivityNew" />
         <activity android:name=".extraUtils.SplashActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <meta-data

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainModel {
-    int page;
-    int total_results;
-    int total_pages;
-    List<MovieModel> results = new ArrayList<MovieModel>();
+    private int page;
+    private int total_results;
+    private int total_pages;
+    private List<MovieModel> results = new ArrayList<>();
 
     public MainModel() {
     }

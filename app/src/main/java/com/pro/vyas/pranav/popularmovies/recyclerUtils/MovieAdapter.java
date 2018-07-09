@@ -2,8 +2,6 @@ package com.pro.vyas.pranav.popularmovies.recyclerUtils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +13,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.nex3z.flowlayout.FlowLayout;
-import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadGenreAsyncTask;
 import com.pro.vyas.pranav.popularmovies.DetailActivity;
 import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
@@ -56,8 +53,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
                 .into(holder.ivPoster);
         final int pos = position;
         holder.flowGenre.removeAllViews();
-        //LoadGenreAsyncTask loadGenre = new LoadGenreAsyncTask(ct,movie.get(pos).getGenre_ids(),holder.flowGenre);
-        //loadGenre.execute();
         Chip chip = new Chip(ct);
         chip.setChipText(movie.get(position).getVote_average()+"/10");
         chip.setHasIcon(true);
@@ -90,7 +85,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         return movie.size();
     }
 
-    public class MovieHolder extends RecyclerView.ViewHolder{
+    class MovieHolder extends RecyclerView.ViewHolder{
         TextView tvTitle;
         final FlowLayout flowGenre;
         ImageView ivPoster;
@@ -98,7 +93,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         CardView ivmovieLower;
         ImageView ivPosterBack;
 
-        public MovieHolder(View itemView) {
+        MovieHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.text_title_recycler);
             flowGenre = itemView.findViewById(R.id.flowlayout_genre_recycler);

@@ -1,8 +1,8 @@
 package com.pro.vyas.pranav.popularmovies.models;
 
 public class GenreModel {
-    String id;
-    String name;
+    private String id;
+    private String name;
 
     public GenreModel() {
     }

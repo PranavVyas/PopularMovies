@@ -3,7 +3,7 @@ package com.pro.vyas.pranav.popularmovies.models;
 import java.util.List;
 
 public class MainGenreModel {
-    List<GenreModel> genres;
+    private List<GenreModel> genres;
 
     public MainGenreModel() {
     }

@@ -20,6 +20,8 @@ import com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView;
 import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.squareup.picasso.Picasso;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -42,8 +44,8 @@ public class DetailActivity extends AppCompatActivity {
     @BindView(R.id.text_toolbar_title_detail) AlwaysMarqueeTextView tvToolbarTitleDetail;
     //@BindView(R.id.chip_favourite_detail) TextView btnAddFavourites;
     @BindView(R.id.bottom_navigation)BottomNavigationView bottomNavigation;
+    @BindView(R.id.flow_genre_detail) FlowLayout flowLayout;
 
-    FlowLayout flowLayout;
     static boolean isAdded = false;
     static boolean isSaved = false;
     Intent intent;
@@ -54,12 +56,14 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         ButterKnife.bind(this);
-        intent = getIntent();
-        flowLayout = findViewById(R.id.flow_genre_detail);
+
         setSupportActionBar(toolbarDetail);
-        bindUI(intent);
         tvTitle.setAlwaysMarquee(true);
         tvToolbarTitleDetail.setAlwaysMarquee(true);
+
+        intent = getIntent();
+        bindUI(intent);
+
         initBottomNavigationView(intent);
 
 //        if (isAdded){
@@ -178,7 +182,7 @@ public class DetailActivity extends AppCompatActivity {
         if(actionBar != null){
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        actionBar.setDisplayShowTitleEnabled(false);
+        Objects.requireNonNull(actionBar).setDisplayShowTitleEnabled(false);
     }
 
 //    public void favourite() {

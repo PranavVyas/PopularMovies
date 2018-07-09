@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 
         ivNoConnection.setVisibility(View.GONE);
         currPage = 1;
+        //loadingIndicatorView.show();
         fetchDataFromUrl("1");
 
         buildDrawer(MainActivity.this,toolbarMain,getSupportActionBar());
@@ -97,11 +98,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fetchDataFromUrl(final String pageNo){
-        loadingIndicatorView.smoothToShow();
         ivBackgroundProgress.setVisibility(View.VISIBLE);
         tvProgress.setVisibility(View.VISIBLE);
         String[] array = {pageNo};
-        LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this);
+        LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this,loadingIndicatorView);
         try {
             MainModel model = loadMovie.execute(array).get();
             if(model != null) {
@@ -109,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 attachWithRecyclerView(movie);
                 tvData.setText(String.format(Locale.getDefault(),"+Total Result : %d    +Total Pages : %d\n+Current Page : %d    +Current Sort : %s", model.getTotal_results(), model.getTotal_pages(), currPage, (Objects.equals(sortByFinal, sortByPopularity)) ? "Popularity" : (Objects.equals(sortByFinal, sortByImdbRating)) ? "IMDB Rating" : "Upcoming")
                 );
+                //loadingIndicatorView.smoothToHide();
                 rvMain.setVisibility(View.VISIBLE);
                 tvProgress.setVisibility(View.GONE);
             }else{
@@ -116,7 +117,8 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar sbar = Snackbar.make(tvData,"Network Unavailable",Snackbar.LENGTH_LONG);
                 sbar.show();
                 tvData.setText("No Internet Connection!");
-                loadingIndicatorView.smoothToHide();
+                tvProgress.setText("No Connection Available \nPlease Connect to Internet and\nTry Again");
+                //loadingIndicatorView.smoothToHide();
                 ivNoConnection.setVisibility(View.VISIBLE);
                 ivBackgroundProgress.setVisibility(View.VISIBLE);
                 tvProgress.setVisibility(View.VISIBLE);
@@ -428,9 +430,9 @@ public class MainActivity extends AppCompatActivity {
 //                super.onScrolled(recyclerView, dx, dy);
 //            }
 //        });
-        loadingIndicatorView.smoothToHide();
         ivBackgroundProgress.setVisibility(View.GONE);
         ivNoConnection.setVisibility(View.GONE);
+        //loadingIndicatorView.hide();
     }
 
 

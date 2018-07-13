@@ -25,9 +25,10 @@
             android:id="@+id/text_toolbar_title_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/roboto_bold"
             android:textAlignment="center"
-            android:textSize="20sp"
             android:textColor="@color/textWhite"
+            android:textSize="20sp"
             tools:layout_editor_absoluteX="16dp"
             tools:layout_editor_absoluteY="18dp" />
     </android.support.v7.widget.Toolbar>
@@ -102,6 +103,7 @@
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/roboto_bold"
         android:text="Please Wait...\n Fetching Data from Internet..."
         android:textAlignment="center"
         android:textColor="@android:color/black"

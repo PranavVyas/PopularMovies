@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void fetchDataFromUrl(final String pageNo){
+        loadingIndicatorView.smoothToShow();
         ivBackgroundProgress.setVisibility(View.VISIBLE);
         tvProgress.setVisibility(View.VISIBLE);
         String[] array = {pageNo};
@@ -117,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar sbar = Snackbar.make(tvData,"Network Unavailable",Snackbar.LENGTH_LONG);
                 sbar.show();
                 tvData.setText("No Internet Connection!");
-                tvProgress.setText("No Connection Available \nPlease Connect to Internet and\nTry Again");
-                //loadingIndicatorView.smoothToHide();
+                tvProgress.setText("No Connection Available \nPlease Connect to Internet");
+                loadingIndicatorView.smoothToHide();
                 ivNoConnection.setVisibility(View.VISIBLE);
                 ivBackgroundProgress.setVisibility(View.VISIBLE);
                 tvProgress.setVisibility(View.VISIBLE);

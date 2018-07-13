@@ -20,7 +20,7 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
 
     private MainModel model;
     private Context ct;
-    AVLoadingIndicatorView loadingIndicatorView;
+    private AVLoadingIndicatorView loadingIndicatorView;
 
     public LoadMovieAsyncTask(Context ctx,AVLoadingIndicatorView loadingIndicatorView) {
         this.ct = ctx;
@@ -37,17 +37,9 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
                 .addQueryParameter(KEY_API_KEY,ct.getResources().getString(R.string.API_KEY_TMDB))
                 .addQueryParameter("page",pageNo)
                 .build();
-
-//        try {
-//            Thread.sleep(10000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-
         ANResponse response = requestMovie.executeForObject(MainModel.class);
         if(response.isSuccess()){
             model = (MainModel) response.getResult();
-            loadingIndicatorView.hide();
         }else{
             ANError error = response.getError();
             Log.d(TAG, "doInBackground: Error Occured \nTitle : "+error.getErrorDetail()+"\nDetail: "+error.getMessage());
@@ -58,7 +50,8 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
 
     @Override
     protected void onPostExecute(MainModel mainModel) {
-        //super.onPostExecute(mainModel);
+        super.onPostExecute(mainModel);
+        loadingIndicatorView.smoothToHide();
     }
 
     @Override

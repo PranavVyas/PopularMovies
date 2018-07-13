@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="API_KEY_TMDB"></string>
+    <string name="API_KEY_TMDB">39f5dda6e471d0d92d391f52a8a8828d</string>
 </resources>

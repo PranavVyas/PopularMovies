@@ -3,6 +3,9 @@ package com.pro.vyas.pranav.popularmovies.asyncTaskUtils;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
@@ -21,16 +24,17 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
     private MainModel model;
     private Context ct;
     private AVLoadingIndicatorView loadingIndicatorView;
+    private ImageView bakgProgress;
+    private TextView textProgress;
 
-    public LoadMovieAsyncTask(Context ctx,AVLoadingIndicatorView loadingIndicatorView) {
+    public LoadMovieAsyncTask(Context ctx) {
         this.ct = ctx;
-        this.loadingIndicatorView = loadingIndicatorView;
     }
 
     private static final String TAG = "LoadMovieAsyncTask";
     @Override
     protected MainModel doInBackground(String... strings) {
-        loadingIndicatorView.smoothToShow();
+        showPregress();
         String pageNo = strings[0];
         String KEY_API_KEY = "api_key";
         ANRequest requestMovie = AndroidNetworking.post(sortByFinal)
@@ -44,20 +48,32 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
             ANError error = response.getError();
             Log.d(TAG, "doInBackground: Error Occured \nTitle : "+error.getErrorDetail()+"\nDetail: "+error.getMessage());
         }
-        //loadingIndicatorView.hide();
         return model;
     }
 
     @Override
     protected void onPostExecute(MainModel mainModel) {
         super.onPostExecute(mainModel);
-        loadingIndicatorView.smoothToHide();
+        stopProgress();
     }
 
-    @Override
-    protected void onPreExecute() {
-        //super.onPreExecute();
-        //loadingIndicatorView.show();
+    public void setProgressIndicatores(AVLoadingIndicatorView loadingIndicatorView, ImageView bakg, TextView text){
+        this.loadingIndicatorView = loadingIndicatorView;
+        this.textProgress = text;
+        this.bakgProgress = bakg;
+    }
+
+    private void showPregress(){
+        bakgProgress.setVisibility(View.VISIBLE);
+        textProgress.setText("Please Wait...");
+        textProgress.setVisibility(View.VISIBLE);
+        loadingIndicatorView.smoothToShow();
+    }
+
+    private void stopProgress(){
+        bakgProgress.setVisibility(View.GONE);
+        textProgress.setVisibility(View.GONE);
+        loadingIndicatorView.smoothToHide();
     }
 }
 

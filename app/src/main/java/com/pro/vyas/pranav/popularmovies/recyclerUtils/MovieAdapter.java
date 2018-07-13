@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nex3z.flowlayout.FlowLayout;
@@ -29,9 +30,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     private Context ct;
     private List<MovieModel> movie;
 
-    public MovieAdapter(Context ct,List<MovieModel> movie) {
+    public MovieAdapter(Context ct) {
         this.ct = ct;
-        this.movie = movie;
     }
 
     @NonNull
@@ -82,8 +82,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     @Override
     public int getItemCount() {
-        return movie.size();
+        if (movie == null){return 0;}
+        else {return movie.size();}
     }
+
 
     class MovieHolder extends RecyclerView.ViewHolder{
         TextView tvTitle;
@@ -102,5 +104,10 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             ivmovieUppar = itemView.findViewById(R.id.image_movie_uppar_recycler);
             ivPosterBack = itemView.findViewById(R.id.image_backdrop_detail);
         }
+    }
+
+    public void setMovies(List<MovieModel> movieModels){
+        movie = movieModels;
+        notifyDataSetChanged();
     }
 }

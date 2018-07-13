@@ -75,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.text_toolbar_title_main) TextView tvToolbarTitle;
 
     private Drawer drawer;
+    MovieAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +92,13 @@ public class MainActivity extends AppCompatActivity {
         ivNoConnection.setVisibility(View.GONE);
         currPage = 1;
         //loadingIndicatorView.show();
+        adapter = new MovieAdapter(this);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,this.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3);
+        //RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3,StaggeredGridLayoutManager.VERTICAL);
+        rvMain.setAdapter(adapter);
+        rvMain.setHasFixedSize(true);
+        rvMain.setLayoutManager(layoutManager);
         fetchDataFromUrl("1");
-
         buildDrawer(MainActivity.this,toolbarMain,getSupportActionBar());
         attachFloatingActionMenu();
     }
@@ -102,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
         ivBackgroundProgress.setVisibility(View.VISIBLE);
         tvProgress.setVisibility(View.VISIBLE);
         String[] array = {pageNo};
-        LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this,loadingIndicatorView);
+        LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this);
+        loadMovie.setProgressIndicatores(loadingIndicatorView,ivBackgroundProgress,tvProgress);
         try {
             MainModel model = loadMovie.execute(array).get();
             if(model != null) {
@@ -396,12 +403,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void attachWithRecyclerView(List<MovieModel> movieResult){
-        MovieAdapter adapter = new MovieAdapter(this, movieResult);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,this.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3);
-        //RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3,StaggeredGridLayoutManager.VERTICAL);
-        rvMain.setAdapter(adapter);
-        rvMain.setHasFixedSize(true);
-        rvMain.setLayoutManager(layoutManager);
 //        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 //            @Override
 //            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -431,6 +432,7 @@ public class MainActivity extends AppCompatActivity {
 //                super.onScrolled(recyclerView, dx, dy);
 //            }
 //        });
+        adapter.setMovies(movieResult);
         ivBackgroundProgress.setVisibility(View.GONE);
         ivNoConnection.setVisibility(View.GONE);
         //loadingIndicatorView.hide();

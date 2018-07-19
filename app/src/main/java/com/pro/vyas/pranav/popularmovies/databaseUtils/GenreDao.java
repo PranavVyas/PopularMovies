@@ -1,6 +1,4 @@
 package com.pro.vyas.pranav.popularmovies.databaseUtils;
 
-public class MovieDbContract {
-
-
+public class GenreDao {
 }

@@ -11,6 +11,10 @@ public class Constants {
     public static final String sortByImdbRating = "http://api.themoviedb.org/3/movie/top_rated";
     public static final String sortByUpcoming = "http://api.themoviedb.org/3/movie/upcoming";
 
+    public static final String videoLoadBaseUrl = "https://api.themoviedb.org/3/movie/";
+    public static final String youtubeBaseUrl = "https://www.youtube.com/watch?v=";
+    public static final String youtubeThumbnailUrl = "https://i.ytimg.com/vi/";
+
 
     public static final String INTRO_TITLE_ACTION_BUTTON = "Action Button";
     public static final String INTRO_TITLE_BACK_BUTTON = "Back Button";

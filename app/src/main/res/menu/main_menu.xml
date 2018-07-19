@@ -4,7 +4,13 @@
     <item
     android:id="@+id/sort_by_menu"
     android:title="Sort By"
-    app:showAsAction="always"
+    app:showAsAction="ifRoom"
     android:icon="@drawable/ic_sort_by"
     />
+
+    <item
+        android:id="@+id/favourites_menu"
+        android:title="Favourites"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_favourite_heart_fillled_red" />
 </menu>

@@ -16,19 +16,19 @@ import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.SPLASH_T
 
 public class SplashActivity extends AppCompatActivity {
 
-    @BindView(R.id.progressBar_splash_screen) AVLoadingIndicatorView bar;
+    //@BindView(R.id.progressBar_splash_screen) AVLoadingIndicatorView bar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
-        bar.smoothToShow();
+        //bar.smoothToShow();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 Intent intent = new Intent(SplashActivity.this, MainActivity.class);
                 startActivity(intent);
-                bar.smoothToHide();
+                //bar.smoothToHide();
                 finish();
             }
         },SPLASH_TIME_OUT);

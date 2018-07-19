@@ -10,67 +10,66 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nex3z.flowlayout.FlowLayout;
 import com.pro.vyas.pranav.popularmovies.DetailActivity;
-import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.R;
+import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieEntry;
+import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.robertlevonyan.views.chip.Chip;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
-import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.*;
+import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.baseUrlPoster;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
-{
-    private static final String TAG = "MovieAdapter";
-    private Context ct;
-    private List<MovieModel> movie;
+public class FavouriteMovieAdapter extends RecyclerView.Adapter<FavouriteMovieAdapter.movieHolder>{
 
-    public MovieAdapter(Context ct) {
-        this.ct = ct;
+    Context context;
+    List<MovieEntry> movieList;
+
+    public FavouriteMovieAdapter(Context context){
+        this.context = context;
     }
 
     @NonNull
     @Override
-    public MovieHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(ct);
-        View view = inflater.inflate(R.layout.movie_single_holder,parent,false);
-        return new MovieHolder(view);
+    public movieHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.movie_single_holder,parent,false);
+        return new movieHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieHolder holder, int position) {
-        holder.tvTitle.setText(movie.get(position).getTitle());
+    public void onBindViewHolder(@NonNull movieHolder holder, int position) {
+        holder.tvTitle.setText(movieList.get(position).getTitle());
 
         Picasso.get()
-                .load(baseUrlPoster+movie.get(position).getPoster_path())
+                .load(baseUrlPoster+movieList.get(position).getPoster_path())
                 .placeholder(R.drawable.loading_new)
                 .error(R.drawable.ic_loading)
                 .into(holder.ivPoster);
+
         final int pos = position;
         holder.flowGenre.removeAllViews();
-        Chip chip = new Chip(ct);
-        chip.setChipText(movie.get(position).getVote_average()+"/10");
+        Chip chip = new Chip(context);
+        chip.setChipText(movieList.get(position).getRating()+"/10");
         chip.setHasIcon(true);
-        chip.setChipIcon(ct.getResources().getDrawable(R.drawable.ic_star_rounded));
+        chip.setChipIcon(context.getResources().getDrawable(R.drawable.ic_star_rounded));
         chip.setTextColor(R.color.colorPrimary_text);
         chip.setStrokeColor(R.color.colorBlue);
         chip.setStrokeSize(4);
-        chip.changeBackgroundColor(ct.getResources().getColor(R.color.colorWhite));
+        chip.changeBackgroundColor(context.getResources().getColor(R.color.colorWhite));
         holder.flowGenre.addView(chip);
 
         View.OnClickListener listener = new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(ct, DetailActivity.class);
+                Intent intent = new Intent(context, DetailActivity.class);
                 Gson gson= new Gson();
-                intent.putExtra("MovieJSONString",gson.toJson(movie.get(pos)));
-                intent.putExtra("LoadTrailers",DetailActivity.DEFAULT_LOAD_TRAILER);
-                ct.startActivity(intent);
+                intent.putExtra("MovieJSONString",gson.toJson(movieList.get(pos)));
+                intent.putExtra("LoadTrailers",DetailActivity.DONT_LOAD_TRAILER);
+                context.startActivity(intent);
             }
         };
 
@@ -83,12 +82,11 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     @Override
     public int getItemCount() {
-        if (movie == null){return 0;}
-        else {return movie.size();}
+        if (movieList == null){ return 0;}
+        else { return movieList.size(); }
     }
 
-
-    class MovieHolder extends RecyclerView.ViewHolder{
+    class movieHolder extends RecyclerView.ViewHolder{
         TextView tvTitle;
         final FlowLayout flowGenre;
         ImageView ivPoster;
@@ -96,7 +94,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         CardView ivmovieLower;
         ImageView ivPosterBack;
 
-        MovieHolder(View itemView) {
+        public movieHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.text_title_recycler);
             flowGenre = itemView.findViewById(R.id.flowlayout_genre_recycler);
@@ -107,8 +105,8 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         }
     }
 
-    public void setMovies(List<MovieModel> movieModels){
-        movie = movieModels;
+    public void setFavouriteMovies(List<MovieEntry> movieModelList){
+        this.movieList = movieModelList;
         notifyDataSetChanged();
     }
 }

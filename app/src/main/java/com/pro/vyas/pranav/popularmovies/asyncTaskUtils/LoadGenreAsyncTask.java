@@ -22,18 +22,18 @@ import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.baseUrlG
 
 public class LoadGenreAsyncTask extends AsyncTask<Void,Void,List<String>> {
     private static final String TAG = "LoadGenreAsyncTask";
-    Context context;
+    private Context context;
     private List<String> genreIds;
-    private FlowLayout flowLayout;
     private List<String> names = new ArrayList<>();
     private List<String> ids = new ArrayList<>();
     private List<String> Genres = new ArrayList<>();
+    private LoadGenreAsyncTaskCallBack mCallBack;
 
-    public LoadGenreAsyncTask(Context context, List<String> genreIds, FlowLayout flowLayout){
+    public LoadGenreAsyncTask(Context context,LoadGenreAsyncTaskCallBack callBack, List<String> genreIds){
         this.context = context;
         this.genreIds = genreIds;
+        this.mCallBack = callBack;
         Log.d(TAG, "Iniatlized Now "+Genres.size());
-        this.flowLayout = flowLayout;
     }
 
     @Override
@@ -67,13 +67,10 @@ public class LoadGenreAsyncTask extends AsyncTask<Void,Void,List<String>> {
 
     @Override
     protected void onPostExecute(List<String> strings) {
-        for (String x: strings){
-            Chip chip = new Chip(context);
-            chip.setChipText(x);
-            chip.changeBackgroundColor(context.getResources().getColor(R.color.colorWhite));
-            chip.setStrokeColor(context.getResources().getColor(R.color.colorBlue));
-            chip.setStrokeSize(3);
-            flowLayout.addView(chip);
-        }
+        mCallBack.onCompleteGenre(strings);
+    }
+
+    public interface LoadGenreAsyncTaskCallBack{
+        void onCompleteGenre(List<String> strings);
     }
 }

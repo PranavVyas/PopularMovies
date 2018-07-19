@@ -8,8 +8,8 @@
         android:icon="@drawable/ic_favourite_heart_fillled_red"
         />
     <item
-        android:id="@+id/save_for_later_bottom_detail"
-        android:title="Sort By Upcoming"
+        android:id="@+id/share_bottom_detail"
+        android:title="Share IMDB Link"
         app:showAsAction="always"
         android:icon="@drawable/bookmark_vector"
         />

@@ -26,15 +26,17 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
     private AVLoadingIndicatorView loadingIndicatorView;
     private ImageView bakgProgress;
     private TextView textProgress;
+    private LoadMovieAsynCallback mCallBack;
+    private boolean flag = true;
 
-    public LoadMovieAsyncTask(Context ctx) {
+    public LoadMovieAsyncTask(Context ctx,LoadMovieAsynCallback mCallback) {
         this.ct = ctx;
+        this.mCallBack = mCallback;
     }
 
     private static final String TAG = "LoadMovieAsyncTask";
     @Override
     protected MainModel doInBackground(String... strings) {
-        showPregress();
         String pageNo = strings[0];
         String KEY_API_KEY = "api_key";
         ANRequest requestMovie = AndroidNetworking.post(sortByFinal)
@@ -42,10 +44,12 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
                 .addQueryParameter("page",pageNo)
                 .build();
         ANResponse response = requestMovie.executeForObject(MainModel.class);
-        if(response.isSuccess()){
+        flag = true;
+            if(response.isSuccess()){
             model = (MainModel) response.getResult();
         }else{
             ANError error = response.getError();
+            flag = false;
             Log.d(TAG, "doInBackground: Error Occured \nTitle : "+error.getErrorDetail()+"\nDetail: "+error.getMessage());
         }
         return model;
@@ -53,8 +57,14 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
 
     @Override
     protected void onPostExecute(MainModel mainModel) {
-        super.onPostExecute(mainModel);
-        stopProgress();
+        stopProgress(flag);
+        mCallBack.onComplete(model);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        showPregress();
     }
 
     public void setProgressIndicatores(AVLoadingIndicatorView loadingIndicatorView, ImageView bakg, TextView text){
@@ -70,10 +80,18 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
         loadingIndicatorView.smoothToShow();
     }
 
-    private void stopProgress(){
-        bakgProgress.setVisibility(View.GONE);
+    private void stopProgress(boolean isSucess){
+        if(isSucess){
+            bakgProgress.setVisibility(View.GONE);
+        }else{
+            bakgProgress.setVisibility(View.VISIBLE);
+        }
         textProgress.setVisibility(View.GONE);
         loadingIndicatorView.smoothToHide();
+    }
+
+    public interface LoadMovieAsynCallback{
+        void onComplete(MainModel model);
     }
 }
 

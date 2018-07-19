@@ -3,6 +3,7 @@ package com.pro.vyas.pranav.popularmovies;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -39,17 +41,21 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
+import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadGenreAsyncTask;
+import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadMasterGenreAsyncTask;
 import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadMovieAsyncTask;
+import com.pro.vyas.pranav.popularmovies.models.GenreModel;
 import com.pro.vyas.pranav.popularmovies.models.MainModel;
 import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.prefencesUtils.SharedPrefenceUtils;
 import com.pro.vyas.pranav.popularmovies.recyclerUtils.MovieAdapter;
 import com.wang.avi.AVLoadingIndicatorView;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,7 +63,7 @@ import butterknife.ButterKnife;
 import static android.content.res.Configuration.ORIENTATION_PORTRAIT;
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.*;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTask.LoadMovieAsynCallback,LoadMasterGenreAsyncTask.MasterGenreCallBack{
 
     private SharedPreferences mainPrefs;
 
@@ -75,7 +81,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.text_toolbar_title_main) TextView tvToolbarTitle;
 
     private Drawer drawer;
-    MovieAdapter adapter;
+    private MovieAdapter adapter;
+    List<MovieModel> movie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,9 +96,9 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbarMain);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
 
+        preLoadItems();
         ivNoConnection.setVisibility(View.GONE);
         currPage = 1;
-        //loadingIndicatorView.show();
         adapter = new MovieAdapter(this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,this.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3);
         //RecyclerView.LayoutManager layoutManager = new StaggeredGridLayoutManager(context.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3,StaggeredGridLayoutManager.VERTICAL);
@@ -103,39 +110,18 @@ public class MainActivity extends AppCompatActivity {
         attachFloatingActionMenu();
     }
 
+    private void preLoadItems() {
+
+    }
+
     public void fetchDataFromUrl(final String pageNo){
         loadingIndicatorView.smoothToShow();
         ivBackgroundProgress.setVisibility(View.VISIBLE);
         tvProgress.setVisibility(View.VISIBLE);
         String[] array = {pageNo};
-        LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this);
+        LoadMovieAsyncTask loadMovie = new LoadMovieAsyncTask(this,this);
         loadMovie.setProgressIndicatores(loadingIndicatorView,ivBackgroundProgress,tvProgress);
-        try {
-            MainModel model = loadMovie.execute(array).get();
-            if(model != null) {
-                List<MovieModel> movie = model.getResults();
-                attachWithRecyclerView(movie);
-                tvData.setText(String.format(Locale.getDefault(),"+Total Result : %d    +Total Pages : %d\n+Current Page : %d    +Current Sort : %s", model.getTotal_results(), model.getTotal_pages(), currPage, (Objects.equals(sortByFinal, sortByPopularity)) ? "Popularity" : (Objects.equals(sortByFinal, sortByImdbRating)) ? "IMDB Rating" : "Upcoming")
-                );
-                //loadingIndicatorView.smoothToHide();
-                rvMain.setVisibility(View.VISIBLE);
-                tvProgress.setVisibility(View.GONE);
-            }else{
-                //Log.d(TAG, "onError: "+anError.getErrorDetail());
-                Snackbar sbar = Snackbar.make(tvData,"Network Unavailable",Snackbar.LENGTH_LONG);
-                sbar.show();
-                tvData.setText("No Internet Connection!");
-                tvProgress.setText("No Connection Available \nPlease Connect to Internet");
-                loadingIndicatorView.smoothToHide();
-                ivNoConnection.setVisibility(View.VISIBLE);
-                ivBackgroundProgress.setVisibility(View.VISIBLE);
-                tvProgress.setVisibility(View.VISIBLE);
-                rvMain.setVisibility(View.INVISIBLE);
-            }
-        } catch (InterruptedException | ExecutionException e) {
-            Toast.makeText(this, "Error Occured : "+e.getMessage(), Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+        loadMovie.execute(array);
     }
 
     public void attachFloatingActionMenu(){
@@ -255,6 +241,10 @@ public class MainActivity extends AppCompatActivity {
                 changeSortOrder();
                 return true;
 
+            case R.id.favourites_menu:
+                Intent intent = new Intent(MainActivity.this,FavoritesActivity.class);
+                startActivity(intent);
+
             default:
                 return false;
         }
@@ -343,6 +333,8 @@ public class MainActivity extends AppCompatActivity {
                         switch (position){
                             case 1:
                                 Toast.makeText(context, "Clicked Favourite", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(MainActivity.this,FavoritesActivity.class);
+                                startActivity(intent);
                                 break;
 
                             case 2:
@@ -359,11 +351,11 @@ public class MainActivity extends AppCompatActivity {
                 if (drawer.isDrawerOpen()){
                     drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(false);
                     actionbar.setDisplayHomeAsUpEnabled(true);
-                    Toast.makeText(context, "Is Closing", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Is Closing Drawer", Toast.LENGTH_SHORT).show();
                 }else{
                     actionbar.setDisplayHomeAsUpEnabled(false);
                     drawer.getActionBarDrawerToggle().setDrawerIndicatorEnabled(true);
-                    Toast.makeText(context, "Is Opening", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Is Opening Drawer", Toast.LENGTH_SHORT).show();
                 }
                 return false;
             }
@@ -403,39 +395,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void attachWithRecyclerView(List<MovieModel> movieResult){
-//        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//                GridLayoutManager layoutManager=GridLayoutManager.class.cast(recyclerView.getLayoutManager());
-//                int visibleItemCount = layoutManager.getChildCount();
-//                int totalItemCount = layoutManager.getItemCount();
-//                int pastVisibleItems = layoutManager.findFirstCompletelyVisibleItemPosition();
-//
-//                if(pastVisibleItems+visibleItemCount >= totalItemCount){
-//                    // End of the list is here.
-//                    Toast.makeText(ct, "Scroll Ended", Toast.LENGTH_SHORT).show();
-//                    Log.i(TAG, "End of list");
-//
-//                }
-////                if(newState == RecyclerView.SCROLL_STATE_SETTLING){
-////                    Toast.makeText(ct, "Settlig", Toast.LENGTH_SHORT).show();}
-////                    else if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
-////                    Toast.makeText(ct, "DRagging", Toast.LENGTH_SHORT).show();
-////                }else{
-////                    Toast.makeText(ct, "NOT SCrolling", Toast.LENGTH_SHORT).show();
-////                }
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//            }
-//        });
         adapter.setMovies(movieResult);
         ivBackgroundProgress.setVisibility(View.GONE);
         ivNoConnection.setVisibility(View.GONE);
-        //loadingIndicatorView.hide();
     }
 
 
@@ -443,5 +405,60 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         if (drawer.isDrawerOpen()){drawer.closeDrawer();}
         else {super.onBackPressed();}
+    }
+
+    @Override
+    public void onComplete(MainModel model) {
+        if(model != null) {
+            LoadMasterGenreAsyncTask masterGenreAsyncTask = new LoadMasterGenreAsyncTask(this,this);
+            masterGenreAsyncTask.execute();
+            movie = model.getResults();
+        }else{
+            Snackbar sbar = Snackbar.make(tvData,"Network Unavailable",Snackbar.LENGTH_LONG);
+            sbar.show();
+            tvData.setText("No Internet Connection!");
+            tvProgress.setText("No Connection Available \nPlease Connect to Internet");
+            loadingIndicatorView.smoothToHide();
+            ivNoConnection.setVisibility(View.VISIBLE);
+            ivBackgroundProgress.setVisibility(View.VISIBLE);
+            tvProgress.setVisibility(View.VISIBLE);
+            rvMain.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private String convertIdsToString(List<String> genre_id) {
+        String result = "";
+        for (int i = 0; i < genre_id.size(); i++){
+            result = result + genre_id.get(i) + ",";
+        }
+        return result;
+    }
+
+    @Override
+    public void onCompleteMasterGenre(List<GenreModel> genreModels) {
+        List<String> ids = new ArrayList<>();
+        List<String> names = new ArrayList<>();
+        for(GenreModel genre : genreModels){
+            ids.add(genre.getId());
+            names.add(genre.getName());
+        }
+        for(int i = 0; i < movie.size();i++){
+            List<String> SelectedGenre = new ArrayList<>();
+            List<String> genre_id = movie.get(i).getGenre_ids();
+            for (String id : genre_id){
+                int idPosition = ids.indexOf(id);
+                String genreName = names.get(idPosition);
+                SelectedGenre.add(genreName);
+            }
+            String movieGenre = convertIdsToString(SelectedGenre);
+            movie.get(i).setTag_Genre(movieGenre);
+        }
+//        tvData.setText(String.format(Locale.getDefault(),"+Total Result : %d    +Total Pages : %d\n+Current Page : %d    +Current Sort : %s", model.getTotal_results(), model.getTotal_pages(), currPage, (Objects.equals(sortByFinal, sortByPopularity)) ? "Popularity" : (Objects.equals(sortByFinal, sortByImdbRating)) ? "IMDB Rating" : "Upcoming")
+//        );
+        tvData.setText(String.format(Locale.getDefault(),"+Current Page : %d    +Current Sort : %s", currPage, (Objects.equals(sortByFinal, sortByPopularity)) ? "Popularity" : (Objects.equals(sortByFinal, sortByImdbRating)) ? "IMDB Rating" : "Upcoming")
+        );
+        rvMain.setVisibility(View.VISIBLE);
+        tvProgress.setVisibility(View.GONE);
+        attachWithRecyclerView(movie);
     }
 }

@@ -32,6 +32,9 @@ repositories {
 }
 
 dependencies {
+    def room_version = "1.1.1"
+    def lifecycle_version = "1.1.1"
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "com.android.support:appcompat-v7:$supportLibraryVersion"
     implementation "com.android.support:exifinterface:$supportLibraryVersion"
@@ -59,6 +62,11 @@ dependencies {
     implementation("com.mikepenz:materialdrawer:6.0.8@aar") {
         transitive = true
     }
+
+    implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+    annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
+    implementation "android.arch.persistence.room:runtime:$room_version"
+    annotationProcessor "android.arch.persistence.room:compiler:$room_version"
 
 
 }

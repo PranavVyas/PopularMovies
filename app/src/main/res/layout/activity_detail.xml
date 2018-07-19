@@ -212,13 +212,31 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="8dp"
+                android:gravity="center"
                 app:flChildSpacing="0dp"
                 app:flMaxRows="4"
                 app:layout_constraintBottom_toTopOf="@+id/text_total_votes_detail"
                 app:layout_constraintEnd_toEndOf="@+id/text_genre_detail"
                 app:layout_constraintStart_toStartOf="@+id/text_genre_detail"
-                app:layout_constraintTop_toBottomOf="@+id/text_genre_detail" />
+                app:layout_constraintTop_toBottomOf="@+id/text_genre_detail">
 
+                <com.wang.avi.AVLoadingIndicatorView
+                    android:id="@+id/loading_indicator_genre"
+                    style="@style/AVLoadingIndicatorView"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    app:indicatorColor="@color/colorAccent"
+                    app:indicatorName="BallGridPulseIndicator"
+                    app:layout_constraintBottom_toTopOf="@+id/recycler_title_trailer"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="1.0" />
+            </view>
             <TextView
                 android:id="@+id/tag_videos_detail"
                 android:layout_width="0dp"

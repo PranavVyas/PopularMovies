@@ -17,6 +17,7 @@
             android:theme="@style/MaterialDrawerTheme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -24,12 +25,15 @@
             android:name=".DetailActivity"
             android:label="DetailActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".extraUtils.SplashActivity" >
-        </activity>
+        <activity android:name=".extraUtils.SplashActivity"></activity>
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".FavoritesActivity"
+            android:label="FavoritesActivity"
+            android:parentActivityName=".MainActivity"></activity>
     </application>
 
 </manifest>

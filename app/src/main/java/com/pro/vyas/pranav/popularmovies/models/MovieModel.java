@@ -7,6 +7,7 @@ public class MovieModel {
     private String id;
     private String vote_count,vote_average,title,popularity,poster_path,overview,release_date,backdrop_path;
     private List<String> genre_ids;
+    private String tag_Genre;
 
     public MovieModel() {
     }
@@ -22,6 +23,14 @@ public class MovieModel {
         this.release_date = release_date;
         this.backdrop_path = backdrop_path;
         this.genre_ids = genre_ids;
+    }
+
+    public String getTag_Genre() {
+        return tag_Genre;
+    }
+
+    public void setTag_Genre(String tag_Genre) {
+        this.tag_Genre = tag_Genre;
     }
 
     public String getId() {

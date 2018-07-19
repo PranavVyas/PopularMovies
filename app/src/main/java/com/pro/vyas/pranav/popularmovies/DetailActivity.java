@@ -19,7 +19,6 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nex3z.flowlayout.FlowLayout;
-import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadGenreAsyncTask;
 import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadVideosAsyncTask;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieDatabase;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieEntry;
@@ -68,7 +67,6 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
     @BindView(R.id.loading_indicator_genre) AVLoadingIndicatorView loadingGenre;
 
     static boolean isAdded = false;
-    static boolean isSaved = false;
     Intent intent;
     MovieModel modelForFavourite;
     private MovieDatabase mDb;
@@ -76,9 +74,6 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
 
     public static final int DEFAULT_LOAD_TRAILER = -1;
     public static final int DONT_LOAD_TRAILER = 0;
-    public static final int DEFAULT_LOAD_GENRE = 12;
-    public static final int LOAD_GENRE_FROM_DB = 13;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +157,6 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
                         break;
 
                     case R.id.share_bottom_detail:
-
                         break;
                 }
                 return true;
@@ -172,7 +166,6 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
 
     public void bindUI(Intent intent){
         ActionBar actionBar = getSupportActionBar();
-
         if (intent.hasExtra("MovieJSONString")){
             Gson gson = new Gson();
             MovieModel model = gson.fromJson(intent.getStringExtra("MovieJSONString"), MovieModel.class);
@@ -209,7 +202,7 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
     }
 
     private void loadGenre(String tag_genre) {
-        Toast.makeText(this, "Genre is "+tag_genre, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Genre is "+tag_genre, Toast.LENGTH_SHORT).show();
         loadingGenre.smoothToHide();
         flowLayout.removeAllViews();
         List<String> strings = new ArrayList<>(Arrays.asList(tag_genre.split(",")));
@@ -278,10 +271,10 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
     public boolean checkAlreadyFavourite(){
         MovieEntry model = mDb.movieDao().getMovieById(modelForFavourite.getId());
         if(model == null){
-            //Toast.makeText(this, "Not Favourite", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Not Favourite", Toast.LENGTH_SHORT).show();
             return false;
         }else{
-            //Toast.makeText(this, "Favourite Already", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Favourite Already", Toast.LENGTH_SHORT).show();
             return true;
         }
     }

@@ -41,7 +41,6 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionButton;
 import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
-import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadGenreAsyncTask;
 import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadMasterGenreAsyncTask;
 import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadMovieAsyncTask;
 import com.pro.vyas.pranav.popularmovies.models.GenreModel;

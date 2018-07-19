@@ -16,7 +16,6 @@ import com.nex3z.flowlayout.FlowLayout;
 import com.pro.vyas.pranav.popularmovies.DetailActivity;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieEntry;
-import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.robertlevonyan.views.chip.Chip;
 import com.squareup.picasso.Picasso;
 
@@ -53,7 +52,7 @@ public class FavouriteMovieAdapter extends RecyclerView.Adapter<FavouriteMovieAd
         final int pos = position;
         holder.flowGenre.removeAllViews();
         Chip chip = new Chip(context);
-        chip.setChipText(movieList.get(position).getRating()+"/10");
+        chip.setChipText(movieList.get(position).getVote_average()+"/10");
         chip.setHasIcon(true);
         chip.setChipIcon(context.getResources().getDrawable(R.drawable.ic_star_rounded));
         chip.setTextColor(R.color.colorPrimary_text);

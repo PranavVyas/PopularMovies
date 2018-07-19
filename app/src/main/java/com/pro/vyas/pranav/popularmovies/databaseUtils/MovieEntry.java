@@ -9,25 +9,25 @@ import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 @Entity(tableName = "Movies")
 public class MovieEntry {
     @PrimaryKey @NonNull
-    String movie_id;
+    String id;
     String title;
     String genre;
     String poster_path;
     String backddrop_path;
     String overview;
-    String rating;
+    String vote_average;
     String release_date;
     String vote_count;
     String tag_Genre;
 
     public MovieEntry(MovieModel model){
-        this.movie_id = model.getId();
+        this.id = model.getId();
         this.title = model.getTitle();
         this.tag_Genre = model.getTag_Genre();
         this.poster_path = model.getPoster_path();
         this.backddrop_path = model.getBackdrop_path();
         this.overview = model.getOverview();
-        this.rating = model.getVote_average();
+        this.vote_average = model.getVote_average();
         this.release_date = model.getRelease_date();
         this.vote_count = model.getVote_count();
     }
@@ -36,12 +36,12 @@ public class MovieEntry {
     }
 
     @NonNull
-    public String getMovie_id() {
-        return movie_id;
+    public String getId() {
+        return id;
     }
 
-    public void setMovie_id(@NonNull String movie_id) {
-        this.movie_id = movie_id;
+    public void setId(@NonNull String id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -84,12 +84,12 @@ public class MovieEntry {
         this.overview = overview;
     }
 
-    public String getRating() {
-        return rating;
+    public String getVote_average() {
+        return vote_average;
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
+    public void setVote_average(String vote_average) {
+        this.vote_average = vote_average;
     }
 
     public String getRelease_date() {

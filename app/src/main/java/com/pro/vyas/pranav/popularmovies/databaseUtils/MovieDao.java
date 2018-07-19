@@ -14,7 +14,7 @@ public interface MovieDao {
     @Query("SELECT * FROM Movies ORDER BY title")
     List<MovieEntry> getAllMovies();
 
-    @Query("SELECT * FROM Movies WHERE movie_id is :id")
+    @Query("SELECT * FROM Movies WHERE id is :id")
     MovieEntry getMovieById(String id);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)

@@ -31,34 +31,34 @@ public class LoadVideosAsyncTask extends AsyncTask<Void, Void, DetailMovieModel>
     private DetailMovieModel movieForVideos;
     private LoadTrailerAsyncTaskCallback mCallback;
 
-    public LoadVideosAsyncTask(Context ct,LoadTrailerAsyncTaskCallback callback) {
+    public LoadVideosAsyncTask(Context ct, LoadTrailerAsyncTaskCallback callback) {
         this.ct = ct;
         this.mCallback = callback;
     }
 
-    public void loadMovieId(String movieId){
+    public void loadMovieId(String movieId) {
         this.movieId = movieId;
     }
 
     @Override
     protected DetailMovieModel doInBackground(Void... Void) {
         String KEY_API_KEY = "api_key";
-        String url = videoLoadBaseUrl+movieId+"/videos";
+        String url = videoLoadBaseUrl + movieId + "/videos";
 
         ANRequest requestMovie = AndroidNetworking.get(url)
-                .addQueryParameter(KEY_API_KEY,ct.getResources().getString(R.string.API_KEY_TMDB))
+                .addQueryParameter(KEY_API_KEY, ct.getResources().getString(R.string.API_KEY_TMDB))
                 .build();
-        Log.d(TAG, "doInBackground: URL IS :"+url);
+        Log.d(TAG, "doInBackground: URL IS :" + url);
         ANResponse response = requestMovie.executeForObject(DetailMovieModel.class);
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             movieForVideos = (DetailMovieModel) response.getResult();
-        }else{
+        } else {
             //Toast.makeText(ct.getApplicationContext(), "Did not Connect", Toast.LENGTH_SHORT).show();
             Log.d(TAG, "doInBackground: Did not connect");
         }
         List<VideosModel> videos = movieForVideos.getResults();
-        for(int i = 0; i < videos.size(); i++){
-            Log.d(TAG, "onPostExecute: Movie Trailer is "+videos.get(i).getKey());
+        for (int i = 0; i < videos.size(); i++) {
+            Log.d(TAG, "onPostExecute: Movie Trailer is " + videos.get(i).getKey());
         }
         return movieForVideos;
     }
@@ -74,7 +74,7 @@ public class LoadVideosAsyncTask extends AsyncTask<Void, Void, DetailMovieModel>
         mCallback.onComplete(detailMovieModel);
     }
 
-    public interface LoadTrailerAsyncTaskCallback{
+    public interface LoadTrailerAsyncTaskCallback {
         void onComplete(DetailMovieModel detailMovieModel);
     }
 

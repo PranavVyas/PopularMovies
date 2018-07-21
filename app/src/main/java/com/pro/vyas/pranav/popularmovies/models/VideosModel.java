@@ -2,7 +2,7 @@ package com.pro.vyas.pranav.popularmovies.models;
 
 public class VideosModel {
 
-    private String id,key,name,site,size,type;
+    private String id, key, name, site, size, type;
 
     public VideosModel(String id, String key, String name, String site, String size, String type) {
         this.id = id;

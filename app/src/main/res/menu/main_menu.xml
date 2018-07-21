@@ -11,6 +11,12 @@
     <item
         android:id="@+id/favourites_menu"
         android:title="Favourites"
-        app:showAsAction="ifRoom"
-        android:icon="@drawable/ic_favourite_heart_fillled_red" />
+        app:showAsAction="always"
+        android:icon="@drawable/ic_unfavourite_heart_filled_red" />
+
+    <item
+        android:id="@+id/refresh_menu"
+        android:title="Refresh"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_loading"/>
 </menu>

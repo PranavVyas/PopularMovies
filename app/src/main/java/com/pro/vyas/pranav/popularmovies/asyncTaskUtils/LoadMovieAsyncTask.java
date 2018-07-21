@@ -29,28 +29,29 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
     private LoadMovieAsynCallback mCallBack;
     private boolean flag = true;
 
-    public LoadMovieAsyncTask(Context ctx,LoadMovieAsynCallback mCallback) {
+    public LoadMovieAsyncTask(Context ctx, LoadMovieAsynCallback mCallback) {
         this.ct = ctx;
         this.mCallBack = mCallback;
     }
 
     private static final String TAG = "LoadMovieAsyncTask";
+
     @Override
     protected MainModel doInBackground(String... strings) {
         String pageNo = strings[0];
         String KEY_API_KEY = "api_key";
         ANRequest requestMovie = AndroidNetworking.post(sortByFinal)
-                .addQueryParameter(KEY_API_KEY,ct.getResources().getString(R.string.API_KEY_TMDB))
-                .addQueryParameter("page",pageNo)
+                .addQueryParameter(KEY_API_KEY, ct.getResources().getString(R.string.API_KEY_TMDB))
+                .addQueryParameter("page", pageNo)
                 .build();
         ANResponse response = requestMovie.executeForObject(MainModel.class);
         flag = true;
-            if(response.isSuccess()){
+        if (response.isSuccess()) {
             model = (MainModel) response.getResult();
-        }else{
+        } else {
             ANError error = response.getError();
             flag = false;
-            Log.d(TAG, "doInBackground: Error Occured \nTitle : "+error.getErrorDetail()+"\nDetail: "+error.getMessage());
+            Log.d(TAG, "doInBackground: Error Occured \nTitle : " + error.getErrorDetail() + "\nDetail: " + error.getMessage());
         }
         return model;
     }
@@ -67,30 +68,30 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
         showPregress();
     }
 
-    public void setProgressIndicatores(AVLoadingIndicatorView loadingIndicatorView, ImageView bakg, TextView text){
+    public void setProgressIndicatores(AVLoadingIndicatorView loadingIndicatorView, ImageView bakg, TextView text) {
         this.loadingIndicatorView = loadingIndicatorView;
         this.textProgress = text;
         this.bakgProgress = bakg;
     }
 
-    private void showPregress(){
+    private void showPregress() {
         bakgProgress.setVisibility(View.VISIBLE);
         textProgress.setText("Please Wait...");
         textProgress.setVisibility(View.VISIBLE);
         loadingIndicatorView.smoothToShow();
     }
 
-    private void stopProgress(boolean isSucess){
-        if(isSucess){
+    private void stopProgress(boolean isSucess) {
+        if (isSucess) {
             bakgProgress.setVisibility(View.GONE);
-        }else{
+        } else {
             bakgProgress.setVisibility(View.VISIBLE);
         }
         textProgress.setVisibility(View.GONE);
         loadingIndicatorView.smoothToHide();
     }
 
-    public interface LoadMovieAsynCallback{
+    public interface LoadMovieAsynCallback {
         void onComplete(MainModel model);
     }
 }

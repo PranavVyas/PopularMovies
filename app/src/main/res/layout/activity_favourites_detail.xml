@@ -8,20 +8,20 @@
     tools:context=".DetailActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_detail"
+        android:id="@+id/toolbar_favourites_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:gravity="center"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:layout_constraintBottom_toTopOf="@id/scrollDetail"
+        app:layout_constraintBottom_toTopOf="@id/scrollDetail_favourites"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView
-            android:id="@+id/text_toolbar_title_detail"
+            android:id="@+id/text_toolbar_title_favourites_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="@color/textWhite"
@@ -32,47 +32,31 @@
     </android.support.v7.widget.Toolbar>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottom_navigation"
+        android:id="@+id/bottom_navigation_favourites"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/scrollDetail"
+        app:layout_constraintTop_toBottomOf="@id/scrollDetail_favourites"
         app:menu="@menu/bottom_menu" />
 
 
     <ScrollView
-        android:id="@+id/scrollDetail"
+        android:id="@+id/scrollDetail_favourites"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation"
+        app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_favourites"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_detail">
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_favourites_detail">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.wang.avi.AVLoadingIndicatorView
-                android:id="@+id/loading_indicator_reviews"
-                style="@style/AVLoadingIndicatorView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                app:indicatorColor="@color/colorAccent"
-                app:indicatorName="BallGridPulseIndicator"
-                app:layout_constraintBottom_toBottomOf="@+id/rv_reviews_detail"
-                app:layout_constraintEnd_toEndOf="@+id/rv_reviews_detail"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/rv_reviews_detail" />
-
             <ImageView
-                android:id="@+id/image_backdrop_detail"
+                android:id="@+id/image_backdrop_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="200dp"
                 android:scaleType="fitXY"
@@ -80,37 +64,37 @@
                 app:layout_collapseParallaxMultiplier="0.75"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@color/colorDivider" />
+                app:srcCompat="@drawable/background" />
 
             <ImageView
-                android:id="@+id/image_poster_detail"
+                android:id="@+id/image_poster_detail_favourites"
                 android:layout_width="175dp"
                 android:layout_height="250dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="fitXY"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_backdrop_detail"
+                app:layout_constraintTop_toBottomOf="@+id/image_backdrop_detail_favourites"
                 app:srcCompat="@color/colorAccent" />
 
             <com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView
-                android:id="@+id/text_title_detail"
+                android:id="@+id/text_title_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Title"
+                android:text="TextView"
                 android:textAlignment="center"
                 android:textColor="@color/textBlack"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/image_poster_detail"
-                app:layout_constraintTop_toTopOf="@+id/image_poster_detail" />
+                app:layout_constraintStart_toEndOf="@+id/image_poster_detail_favourites"
+                app:layout_constraintTop_toTopOf="@+id/image_poster_detail_favourites" />
 
             <TextView
-                android:id="@+id/tag_release_detail"
+                android:id="@+id/tag_release_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -118,25 +102,24 @@
                 android:textAlignment="center"
                 android:textColor="@color/textDarkBlue"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/text_title_detail"
-                app:layout_constraintStart_toStartOf="@+id/text_title_detail"
-                app:layout_constraintTop_toBottomOf="@+id/text_title_detail" />
+                app:layout_constraintEnd_toEndOf="@+id/text_title_detail_favourites"
+                app:layout_constraintStart_toStartOf="@+id/text_title_detail_favourites"
+                app:layout_constraintTop_toBottomOf="@+id/text_title_detail_favourites" />
 
             <TextView
-                android:id="@+id/text_release_detail"
+                android:id="@+id/text_release_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="00-00-0000"
+                android:text="TextView"
                 android:textAlignment="center"
                 android:textColor="@color/textBlack"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/tag_release_detail"
-                app:layout_constraintStart_toStartOf="@+id/tag_release_detail"
-                app:layout_constraintTop_toBottomOf="@+id/tag_release_detail" />
+                app:layout_constraintEnd_toEndOf="@+id/tag_release_detail_favourites"
+                app:layout_constraintStart_toStartOf="@+id/tag_release_detail_favourites"
+                app:layout_constraintTop_toBottomOf="@+id/tag_release_detail_favourites" />
 
             <TextView
-                android:id="@+id/tag_synopsis_detail"
+                android:id="@+id/tag_synopsis_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
@@ -146,13 +129,12 @@
                 android:textAlignment="center"
                 android:textColor="@color/textDarkBlue"
                 android:textSize="14sp"
-                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_rating_detail" />
+                app:layout_constraintTop_toBottomOf="@+id/text_rating_detail_favourites" />
 
             <TextView
-                android:id="@+id/tag_genre_detail"
+                android:id="@+id/tag_genre_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
@@ -160,25 +142,24 @@
                 android:textAlignment="center"
                 android:textColor="@color/textDarkBlue"
                 android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="@+id/text_release_detail"
-                app:layout_constraintStart_toStartOf="@+id/text_release_detail"
-                app:layout_constraintTop_toBottomOf="@+id/text_release_detail" />
+                app:layout_constraintEnd_toEndOf="@+id/text_release_detail_favourites"
+                app:layout_constraintStart_toStartOf="@+id/text_release_detail_favourites"
+                app:layout_constraintTop_toBottomOf="@+id/text_release_detail_favourites" />
 
             <TextView
-                android:id="@+id/text_genre_detail"
+                android:id="@+id/text_genre_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:text="TextView"
                 android:textAlignment="center"
                 android:textColor="@color/textBlack"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/tag_genre_detail"
-                app:layout_constraintStart_toStartOf="@+id/tag_genre_detail"
-                app:layout_constraintTop_toBottomOf="@+id/tag_genre_detail" />
+                app:layout_constraintEnd_toEndOf="@+id/tag_genre_detail_favourites"
+                app:layout_constraintStart_toStartOf="@+id/tag_genre_detail_favourites"
+                app:layout_constraintTop_toBottomOf="@+id/tag_genre_detail_favourites" />
 
             <TextView
-                android:id="@+id/text_rating_detail"
+                android:id="@+id/text_rating_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -186,47 +167,47 @@
                 android:layout_marginTop="56dp"
                 android:background="@drawable/button_rounded"
                 android:padding="4dp"
-                android:text="IMDB Rating\n0.0"
+                android:text="TextView"
                 android:textAlignment="center"
                 android:textColor="@color/textBlack"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@+id/text_total_votes_detail"
+                app:layout_constraintEnd_toStartOf="@+id/text_total_votes_detail_favourites"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image_poster_detail" />
+                app:layout_constraintTop_toBottomOf="@+id/image_poster_detail_favourites" />
 
             <TextView
-                android:id="@+id/text_total_votes_detail"
+                android:id="@+id/text_total_votes_detail_favourites"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:background="@drawable/button_rounded"
                 android:padding="4dp"
-                android:text="Total Votes\n0000"
+                android:text="TextView"
                 android:textAlignment="center"
                 android:textColor="@color/textBlack"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="@+id/text_rating_detail"
+                app:layout_constraintBottom_toBottomOf="@+id/text_rating_detail_favourites"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/text_rating_detail"
-                app:layout_constraintTop_toTopOf="@+id/text_rating_detail" />
+                app:layout_constraintStart_toEndOf="@+id/text_rating_detail_favourites"
+                app:layout_constraintTop_toTopOf="@+id/text_rating_detail_favourites" />
 
             <TextView
-                android:id="@+id/text_synopsis_detail"
+                android:id="@+id/text_synopsis_detail_favourites"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Story of the plot will apper here"
+                android:text="TextView"
                 android:textColor="@color/textBlack"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tag_synopsis_detail" />
+                app:layout_constraintTop_toBottomOf="@+id/tag_synopsis_detail_favourites" />
 
             <view xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/flow_genre_detail"
+                android:id="@+id/flow_genre_detail_favourites"
                 class="com.nex3z.flowlayout.FlowLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -235,70 +216,13 @@
                 android:gravity="center"
                 app:flChildSpacing="0dp"
                 app:flMaxRows="4"
-                app:layout_constraintBottom_toTopOf="@+id/text_total_votes_detail"
-                app:layout_constraintEnd_toEndOf="@+id/text_genre_detail"
-                app:layout_constraintStart_toStartOf="@+id/text_genre_detail"
-                app:layout_constraintTop_toBottomOf="@+id/text_genre_detail">
+                app:layout_constraintBottom_toTopOf="@+id/text_total_votes_detail_favourites"
+                app:layout_constraintEnd_toEndOf="@+id/text_genre_detail_favourites"
+                app:layout_constraintStart_toStartOf="@+id/text_genre_detail_favourites"
+                app:layout_constraintTop_toBottomOf="@+id/text_genre_detail_favourites">
 
             </view>
 
-            <TextView
-                android:id="@+id/tag_videos_detail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="Videos"
-                android:textAlignment="center"
-                android:textColor="@color/textDarkBlue"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/text_synopsis_detail" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_videos_detail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tag_videos_detail" />
-
-            <TextView
-                android:id="@+id/tag_reviews_detail"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="Reviews"
-                android:textAlignment="center"
-                android:textColor="@color/textDarkBlue"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/rv_videos_detail" />
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_reviews_detail"
-                android:layout_width="0dp"
-                android:layout_height="225dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="12dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tag_reviews_detail" />
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
-
-    <!--app:itemBackground="@color/colorPrimary"-->
-    <!--app:itemIconTint="@color/colorWhite"-->
-    <!--app:itemTextColor="@color/colorWhite"-->
-
 </android.support.constraint.ConstraintLayout>
-

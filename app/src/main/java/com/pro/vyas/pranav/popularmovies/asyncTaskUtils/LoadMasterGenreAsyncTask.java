@@ -16,12 +16,12 @@ import java.util.List;
 
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.baseUrlGenre;
 
-public class LoadMasterGenreAsyncTask extends AsyncTask<Void,Void,List<GenreModel>> {
+public class LoadMasterGenreAsyncTask extends AsyncTask<Void, Void, List<GenreModel>> {
     private List<GenreModel> masterGenre;
     private Context context;
     private MasterGenreCallBack mCallBack;
 
-    public LoadMasterGenreAsyncTask(Context context,MasterGenreCallBack callback){
+    public LoadMasterGenreAsyncTask(Context context, MasterGenreCallBack callback) {
         this.context = context;
         this.mCallBack = callback;
     }
@@ -33,13 +33,13 @@ public class LoadMasterGenreAsyncTask extends AsyncTask<Void,Void,List<GenreMode
                 .addQueryParameter("api_key", context.getResources().getString(R.string.API_KEY_TMDB))
                 .build();
         ANResponse response = request.executeForObject(MainGenreModel.class);
-        if(response.isSuccess()){
+        if (response.isSuccess()) {
             MainGenreModel mainGenre = (MainGenreModel) response.getResult();
             masterGenre = mainGenre.getGenres();
-        }else{
+        } else {
             ANError error = response.getError();
-            Toast.makeText(context, "Error is "+error.getErrorDetail(), Toast.LENGTH_SHORT).show();
-            Toast.makeText(context, "Error Detail is "+error.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error is " + error.getErrorDetail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Error Detail is " + error.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return masterGenre;
     }
@@ -49,7 +49,7 @@ public class LoadMasterGenreAsyncTask extends AsyncTask<Void,Void,List<GenreMode
         mCallBack.onCompleteMasterGenre(genreModels);
     }
 
-    public interface MasterGenreCallBack{
+    public interface MasterGenreCallBack {
         void onCompleteMasterGenre(List<GenreModel> genreModels);
     }
 }

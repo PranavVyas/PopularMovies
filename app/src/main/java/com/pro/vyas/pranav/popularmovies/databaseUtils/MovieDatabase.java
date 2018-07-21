@@ -11,14 +11,14 @@ import android.graphics.Movie;
 import android.support.annotation.NonNull;
 
 @Database(entities = MovieEntry.class, version = 1, exportSchema = false)
-public abstract class MovieDatabase extends RoomDatabase{
+public abstract class MovieDatabase extends RoomDatabase {
 
     public static final String DB_NAME = "Favourite_Movies";
     public static final Object LOCK = new Object();
     public static MovieDatabase sInstance;
 
-    public static MovieDatabase getInstance(Context context){
-        if(sInstance == null) {
+    public static MovieDatabase getInstance(Context context) {
+        if (sInstance == null) {
             synchronized (LOCK) {
                 sInstance = Room.databaseBuilder(context.getApplicationContext(),
                         MovieDatabase.class, MovieDatabase.DB_NAME)

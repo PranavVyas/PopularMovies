@@ -24,8 +24,7 @@ import java.util.List;
 
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.*;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
-{
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder> {
     private static final String TAG = "MovieAdapter";
     private Context ct;
     private List<MovieModel> movie;
@@ -38,7 +37,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     @Override
     public MovieHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(ct);
-        View view = inflater.inflate(R.layout.movie_single_holder,parent,false);
+        View view = inflater.inflate(R.layout.movie_single_holder, parent, false);
         return new MovieHolder(view);
     }
 
@@ -47,14 +46,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         holder.tvTitle.setText(movie.get(position).getTitle());
 
         Picasso.get()
-                .load(baseUrlPoster+movie.get(position).getPoster_path())
+                .load(baseUrlPoster + movie.get(position).getPoster_path())
                 .placeholder(R.drawable.loading_new)
                 .error(R.drawable.ic_loading)
                 .into(holder.ivPoster);
         final int pos = position;
         holder.flowGenre.removeAllViews();
         Chip chip = new Chip(ct);
-        chip.setChipText(movie.get(position).getVote_average()+"/10");
+        chip.setChipText(movie.get(position).getVote_average() + "/10");
         chip.setHasIcon(true);
         chip.setChipIcon(ct.getResources().getDrawable(R.drawable.ic_star_rounded));
         chip.setTextColor(R.color.colorPrimary_text);
@@ -63,13 +62,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         chip.changeBackgroundColor(ct.getResources().getColor(R.color.colorWhite));
         holder.flowGenre.addView(chip);
 
-        View.OnClickListener listener = new View.OnClickListener(){
+        View.OnClickListener listener = new View.OnClickListener() {
             @Override
-            public void onClick(View v){
+            public void onClick(View v) {
                 Intent intent = new Intent(ct, DetailActivity.class);
-                Gson gson= new Gson();
-                intent.putExtra("MovieJSONString",gson.toJson(movie.get(pos)));
-                intent.putExtra("LoadTrailers",DetailActivity.DEFAULT_LOAD_TRAILER);
+                Gson gson = new Gson();
+                intent.putExtra("MovieJSONString", gson.toJson(movie.get(pos)));
                 ct.startActivity(intent);
             }
         };
@@ -83,12 +81,15 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
 
     @Override
     public int getItemCount() {
-        if (movie == null){return 0;}
-        else {return movie.size();}
+        if (movie == null) {
+            return 0;
+        } else {
+            return movie.size();
+        }
     }
 
 
-    class MovieHolder extends RecyclerView.ViewHolder{
+    class MovieHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         final FlowLayout flowGenre;
         ImageView ivPoster;
@@ -107,7 +108,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
         }
     }
 
-    public void setMovies(List<MovieModel> movieModels){
+    public void setMovies(List<MovieModel> movieModels) {
         movie = movieModels;
         notifyDataSetChanged();
     }

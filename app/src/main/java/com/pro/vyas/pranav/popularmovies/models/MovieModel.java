@@ -5,7 +5,7 @@ import java.util.List;
 public class MovieModel {
 
     private String id;
-    private String vote_count,vote_average,title,popularity,poster_path,overview,release_date,backdrop_path;
+    private String vote_count, vote_average, title, popularity, poster_path, overview, release_date, backdrop_path;
     private List<String> genre_ids;
     private String tag_Genre;
 

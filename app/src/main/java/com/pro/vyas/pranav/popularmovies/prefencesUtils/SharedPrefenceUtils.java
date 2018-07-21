@@ -17,38 +17,40 @@ public class SharedPrefenceUtils {
         editor.apply();
     }
 
-    public boolean isFirstTimeRun(){
+    public boolean isFirstTimeRun() {
         return mPrefs.getInt(KEY_FIRST_RUN, 0) == 0;
     }
 
-    public void setFirstTimeRun(boolean firstRun){
-        if(!firstRun){
+    public void setFirstTimeRun(boolean firstRun) {
+        if (!firstRun) {
             editor.putInt(KEY_FIRST_RUN, 1);
             editor.apply();
-        }else {
+        } else {
             editor.putInt(KEY_FIRST_RUN, 0);
             editor.apply();
         }
     }
 
-    public String getData(String key){ return  mPrefs.getString(key,""); }
+    public String getData(String key) {
+        return mPrefs.getString(key, "");
+    }
 
-    public void setData(String key,String value){
-        editor.putString(key,value);
+    public void setData(String key, String value) {
+        editor.putString(key, value);
         editor.apply();
     }
 
-    public List<String> getDataArray(String[] keys){
+    public List<String> getDataArray(String[] keys) {
         List<String> values = new ArrayList<>();
-        for (String x: keys) {
-            values.add(mPrefs.getString(x,""));
+        for (String x : keys) {
+            values.add(mPrefs.getString(x, ""));
         }
         return values;
     }
 
-    public void setDataArray(String[] keys,String[] values){
+    public void setDataArray(String[] keys, String[] values) {
         for (int i = 0; i < keys.length; i++) {
-            editor.putString(keys[i],values[i]);
+            editor.putString(keys[i], values[i]);
         }
         editor.apply();
     }

@@ -18,9 +18,15 @@
     <color name="colorBlack">#000000</color>
     <color name="partialTransparent">#50ffffff</color>
     <color name="colorWhite">#ffffff</color>
+    <color name="colorGray">#8c8c8c</color>
 
     <color name="textBlack">#000000</color>
     <color name="textDarkBlue">#311b92</color>
     <color name="textWhite">#ffffff</color>
+    <color name="colorAccentIntro">#ea80fc</color>
+    <color name="colorBlackIntro">#75000000</color>
+    <color name="colorGreenIntro">#7576ff03</color>
+    <color name="colorSkyBlueIntro">#758c9eff</color>
+    <color name="colorRedIntro">#75d50000</color>
 
 </resources>

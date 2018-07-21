@@ -17,6 +17,7 @@
         android:fontFamily="@font/croissant_one"
         android:text="Welcome to\nMovie-Mania "
         android:textAlignment="center"
+        android:textColor="@color/colorBlack"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/imageView"

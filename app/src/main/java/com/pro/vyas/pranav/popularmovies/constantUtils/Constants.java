@@ -1,7 +1,7 @@
 package com.pro.vyas.pranav.popularmovies.constantUtils;
 
 public class Constants {
-    public static final long SPLASH_TIME_OUT = 2000;
+    public static final long SPLASH_TIME_OUT = 500;
 
     public static final String baseUrlGenre = "https://api.themoviedb.org/3/genre/movie/list";
     public static final String baseUrlPoster = "http://image.tmdb.org/t/p/w185/";
@@ -22,12 +22,12 @@ public class Constants {
     public static final String INTRO_TITLE_REFRESH_BUTTON = "Refresh Button";
     public static final String INTRO_TITLE_SORT_BUTTON = "Sort By Button";
     public static final String INTRO_TITLE_PAGE_NO_BUTTON = "Change Page Button";
-    
+
     public static final String INTRO_DETAIL_ACTION_BUTTON = "Introducing Action Button for quick Toggles \nClick here now";
-    public static final String INTRO_DETAIL_BACK_BUTTON = "After touching Action Button \nTouch this to go back by 1 Page";
-    public static final String INTRO_DETAIL_NEXT_BUTTON = "After touching Action Button \nTouch this to go forward by 1 Page";
-    public static final String INTRO_DETAIL_REFRESH_BUTTON = "After touching Action Button \nRefresh Page by this button";
-    public static final String INTRO_DETAIL_SORT_BUTTON = "After touching Action Button \nTouch this to change Sorting";
-    public static final String INTRO_DETAIL_PAGE_NO_BUTTON = "After touching Action Button \nTouch this to jump to page directly";
+    public static final String INTRO_DETAIL_BACK_BUTTON = "\nTouch this to go back by 1 Page";
+    public static final String INTRO_DETAIL_NEXT_BUTTON = "\nTouch this to go forward by 1 Page";
+    public static final String INTRO_DETAIL_REFRESH_BUTTON = "\nRefresh Page by this button";
+    public static final String INTRO_DETAIL_SORT_BUTTON = "\nTouch this to change Sorting";
+    public static final String INTRO_DETAIL_PAGE_NO_BUTTON = "\nTouch this to jump to page directly";
 
 }

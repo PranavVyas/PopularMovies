@@ -8,24 +8,25 @@ import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 
 @Entity(tableName = "Movies")
 public class MovieEntry {
-    @PrimaryKey @NonNull
+    @PrimaryKey
+    @NonNull
     String id;
     String title;
     String genre;
     String poster_path;
-    String backddrop_path;
+    String backdrop_path;
     String overview;
     String vote_average;
     String release_date;
     String vote_count;
     String tag_Genre;
 
-    public MovieEntry(MovieModel model){
+    public MovieEntry(MovieModel model) {
         this.id = model.getId();
         this.title = model.getTitle();
         this.tag_Genre = model.getTag_Genre();
         this.poster_path = model.getPoster_path();
-        this.backddrop_path = model.getBackdrop_path();
+        this.backdrop_path = model.getBackdrop_path();
         this.overview = model.getOverview();
         this.vote_average = model.getVote_average();
         this.release_date = model.getRelease_date();
@@ -68,12 +69,12 @@ public class MovieEntry {
         this.poster_path = poster_path;
     }
 
-    public String getBackddrop_path() {
-        return backddrop_path;
+    public String getBackdrop_path() {
+        return backdrop_path;
     }
 
-    public void setBackddrop_path(String backddrop_path) {
-        this.backddrop_path = backddrop_path;
+    public void setBackdrop_path(String backdrop_path) {
+        this.backdrop_path = backdrop_path;
     }
 
     public String getOverview() {

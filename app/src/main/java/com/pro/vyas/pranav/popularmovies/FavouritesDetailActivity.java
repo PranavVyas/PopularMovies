@@ -1,120 +1,85 @@
 package com.pro.vyas.pranav.popularmovies;
-
-import android.app.usage.NetworkStatsManager;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.arch.persistence.room.Delete;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.icu.text.RelativeDateTimeFormatter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nex3z.flowlayout.FlowLayout;
-import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadReviewsAsyncTask;
-import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadVideosAsyncTask;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieDatabase;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieEntry;
 import com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView;
-import com.pro.vyas.pranav.popularmovies.extraUtils.ChipPro;
-import com.pro.vyas.pranav.popularmovies.models.DetailMovieModel;
-import com.pro.vyas.pranav.popularmovies.models.DetailMovieReviewModel;
-import com.pro.vyas.pranav.popularmovies.models.MainDetailsMovieModel;
 import com.pro.vyas.pranav.popularmovies.models.MovieModel;
-import com.pro.vyas.pranav.popularmovies.models.ReviewsModel;
-import com.pro.vyas.pranav.popularmovies.models.VideosModel;
 import com.pro.vyas.pranav.popularmovies.recyclerUtils.ReviewsAdapter;
 import com.pro.vyas.pranav.popularmovies.recyclerUtils.TrailerAdapter;
 import com.pro.vyas.pranav.popularmovies.viewModelUtils.FavouriteMovieViewModelFactory;
 import com.pro.vyas.pranav.popularmovies.viewModelUtils.OneAtTimeFavouriteMovieViewModel;
-import com.robertlevonyan.views.chip.Chip;
 import com.squareup.picasso.Picasso;
-import com.wang.avi.AVLoadingIndicatorView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.baseUrlPoster;
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.baseUrlPosterBackground;
-import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.youtubeBaseUrl;
 
-public class DetailActivity extends AppCompatActivity implements LoadVideosAsyncTask.LoadTrailerAsyncTaskCallback, LoadReviewsAsyncTask.LoadReviewsCallBack {
 
-    private static final String TAG = "DetailActivity";
+public class FavouritesDetailActivity extends AppCompatActivity {
 
-    @BindView(R.id.text_title_detail)
+
+    private static final String TAG = "FavouritesDetailActivit";
+
+    @BindView(R.id.text_title_detail_favourites)
     AlwaysMarqueeTextView tvTitle;
-    @BindView(R.id.text_genre_detail)
+    @BindView(R.id.text_genre_detail_favourites)
     TextView tvGenre;
-    @BindView(R.id.text_rating_detail)
+    @BindView(R.id.text_rating_detail_favourites)
     TextView tvRating;
-    @BindView(R.id.text_release_detail)
+    @BindView(R.id.text_release_detail_favourites)
     TextView tvRelease;
-    @BindView(R.id.text_synopsis_detail)
+    @BindView(R.id.text_synopsis_detail_favourites)
     TextView tvSynopsis;
-    @BindView(R.id.text_total_votes_detail)
+    @BindView(R.id.text_total_votes_detail_favourites)
     TextView tvTotalVotes;
-    @BindView(R.id.image_poster_detail)
+    @BindView(R.id.image_poster_detail_favourites)
     ImageView ivPoster;
-    @BindView(R.id.image_backdrop_detail)
+    @BindView(R.id.image_backdrop_detail_favourites)
     ImageView ivPosterBackground;
-    @BindView(R.id.toolbar_detail)
+    @BindView(R.id.toolbar_favourites_detail)
     Toolbar toolbarDetail;
-    @BindView(R.id.text_toolbar_title_detail)
+    @BindView(R.id.text_toolbar_title_favourites_detail)
     AlwaysMarqueeTextView tvToolbarTitleDetail;
     //@BindView(R.id.chip_favourite_detail) TextView btnAddFavourites;
-    @BindView(R.id.bottom_navigation)
+    @BindView(R.id.bottom_navigation_favourites)
     BottomNavigationView bottomNavigation;
-    @BindView(R.id.flow_genre_detail)
+    @BindView(R.id.flow_genre_detail_favourites)
     FlowLayout flowLayout;
-    @BindView(R.id.rv_videos_detail)
-    RecyclerView rvTrailer;
-    @BindView(R.id.loading_indicator_reviews)
-    AVLoadingIndicatorView loadingReviews;
-    @BindView(R.id.rv_reviews_detail)
-    RecyclerView rvReviews;
-    @BindView(R.id.tag_videos_detail)
-    TextView tvVideos;
-    @BindView(R.id.tag_reviews_detail)
-    TextView tvReviews;
 
     static boolean isAdded = false;
-    Intent intent;
-    MovieModel modelForFavourite;
+    private Intent intent;
+    private MovieModel modelForFavourite;
     private MovieDatabase mDb;
-    private TrailerAdapter mTrailerAdapter;
-    private ReviewsAdapter mReviewsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.activity_favourites_detail);
         ButterKnife.bind(this);
         setSupportActionBar(toolbarDetail);
         intent = getIntent();
@@ -138,35 +103,12 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
     }
 
     private void preLoadItems() {
-
         tvTitle.setAlwaysMarquee(true);
         tvToolbarTitleDetail.setAlwaysMarquee(true);
-        mTrailerAdapter = new TrailerAdapter(this);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        rvTrailer.setLayoutManager(layoutManager);
-        rvTrailer.setAdapter(mTrailerAdapter);
-        mReviewsAdapter = new ReviewsAdapter(this);
-        LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
-        layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
-        rvReviews.setLayoutManager(layoutManager1);
-        rvReviews.setAdapter(mReviewsAdapter);
-        mDb = MovieDatabase.getInstance(DetailActivity.this);
+        mDb = MovieDatabase.getInstance(this);
     }
 
-    private void loadTrailers(String movieId) {
-        LoadVideosAsyncTask asyncTask = new LoadVideosAsyncTask(this, this);
-        asyncTask.loadMovieId(movieId);
-        asyncTask.execute();
-    }
-
-    private void loadReviews(String movieId) {
-        LoadReviewsAsyncTask asyncTask = new LoadReviewsAsyncTask(this, this);
-        asyncTask.loadMovieId(movieId);
-        asyncTask.execute();
-    }
-
-    private void initBottomNavigationView(Intent intent) {
+    public void initBottomNavigationView(Intent intent) {
         bottomNavigation.setItemIconTintList(null);
         MenuItem menuItemFavourite = bottomNavigation.getMenu().getItem(0);
         menuItemFavourite.setCheckable(false);
@@ -175,7 +117,16 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
             Gson gson = new Gson();
             modelForFavourite = gson.fromJson(intent.getStringExtra("MovieJSONString"), MovieModel.class);
         }
+        //isAdded = ;
         checkAlreadyFavourite();
+        //Init Bottom Navigation View now
+//        if (isAdded) {
+//            menuItemFavourite.setTitle("Remove From Favourite");
+//            menuItemFavourite.setIcon(getResources().getDrawable(R.drawable.ic_unfavourite_heart_filled_red));
+//        } else {
+//            menuItemFavourite.setIcon(getResources().getDrawable(R.drawable.ic_favourite_heart_fillled_red));
+//            menuItemFavourite.setTitle("Add to Favourite");
+//        }
         //ON Click Listener for Bottom Navigatioj View
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -198,7 +149,7 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
         });
     }
 
-    public void bindUI(Intent intent) {
+    private void bindUI(Intent intent) {
         ActionBar actionBar = getSupportActionBar();
         if (intent.hasExtra("MovieJSONString")) {
             Gson gson = new Gson();
@@ -220,60 +171,11 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
                     .into(ivPosterBackground);
             tvToolbarTitleDetail.setText(model.getTitle());
             loadGenre(model.getTag_Genre());
-            if (checkNetwork()) {
-                loadTrailers(model.getId());
-                loadReviews(model.getId());
-            } else {
-                showTrailers(false);
-                showReviews(false);
-            }
         }
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         Objects.requireNonNull(actionBar).setDisplayShowTitleEnabled(false);
-    }
-
-    private void showReviews(boolean b) {
-        if (!b) {
-            loadingReviews.smoothToHide();
-            rvReviews.setVisibility(View.GONE);
-            tvReviews.setVisibility(View.GONE);
-            loadingReviews.setVisibility(View.GONE);
-            showSnackbar("Please Connect to internet to see Trailer and Reviews\nRefresh After you are connected again!", tvTitle);
-        }else{
-            loadingReviews.smoothToShow();
-        }
-    }
-
-    private void showSnackbar(String message, View view) {
-        Snackbar sbar = Snackbar.make(view, message, Snackbar.LENGTH_LONG);
-        sbar.show();
-    }
-
-    private void showTrailers(boolean b) {
-        if (!b) {
-            rvTrailer.setVisibility(View.GONE);
-            tvVideos.setVisibility(View.GONE);
-        }
-    }
-
-    private boolean checkNetwork() {
-        boolean flag;
-        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
-                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            flag = true;
-            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-        } else if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED
-                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
-            flag = false;
-            Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show();
-        } else {
-            flag = false;
-        }
-
-        return flag;
     }
 
     private void loadGenre(String tag_genre) {
@@ -286,7 +188,7 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
             chip.setText(x);
             chip.setTextColor(Color.BLACK);
             chip.setBackground(this.getResources().getDrawable(R.drawable.button_rounded_gray));
-            chip.setPadding(25, 25, 25, 25);
+            chip.setPadding(25,25,25,25);
             chip.setTextSize(12);
             flowLayout.addView(chip);
             flowLayout.setChildSpacing(12);
@@ -324,23 +226,24 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
 //        }
 //    }
 
-    public void addTofavourites(MovieModel movie) {
+    private void addTofavourites(MovieModel movie) {
         isAdded = true;
         MovieEntry movieToAdd = new MovieEntry(movie);
         mDb.movieDao().insertMovie(movieToAdd);
         Toast.makeText(this, "Sucessfully added to favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
     }
 
-    public void removeFromFavourite(MovieModel movie) {
+    private void removeFromFavourite(MovieModel movie) {
         isAdded = false;
         MovieEntry movieToDelete = new MovieEntry(movie);
         mDb.movieDao().deleteMovie(movieToDelete);
         Toast.makeText(this, "Sucessfully removed from Favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     private void checkAlreadyFavourite() {
-        FavouriteMovieViewModelFactory factory = new FavouriteMovieViewModelFactory(mDb, modelForFavourite.getId());
-        OneAtTimeFavouriteMovieViewModel ViewModel = ViewModelProviders.of(this, factory).get(OneAtTimeFavouriteMovieViewModel.class);
+        FavouriteMovieViewModelFactory factory = new FavouriteMovieViewModelFactory(mDb,modelForFavourite.getId());
+        OneAtTimeFavouriteMovieViewModel ViewModel = ViewModelProviders.of(this,factory).get(OneAtTimeFavouriteMovieViewModel.class);
         ViewModel.getMovie().observe(this, new Observer<MovieEntry>() {
             @Override
             public void onChanged(@Nullable MovieEntry movieEntry) {
@@ -351,8 +254,9 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
                     isAdded = false;
                     menuItemFavourite.setIcon(getResources().getDrawable(R.drawable.ic_favourite_heart_fillled_red));
                     menuItemFavourite.setTitle("Add to Favourite");
+
                 } else {
-                    Toast.makeText(DetailActivity.this, "Favourite Already", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(FavouritesDetailActivity.this, "Favourite Already", Toast.LENGTH_SHORT).show();
                     isAdded = true;
                     menuItemFavourite.setTitle("Remove From Favourite");
                     menuItemFavourite.setIcon(getResources().getDrawable(R.drawable.ic_unfavourite_heart_filled_red));
@@ -360,25 +264,5 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
             }
         });
         //Toast.makeText(this, "Movie is not Favourite", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onComplete(DetailMovieModel detailMovieModel) {
-        List<VideosModel> trailerModel = detailMovieModel.getResults();
-        mTrailerAdapter.setTrailerList(trailerModel);
-    }
-
-    @Override
-    public void onCompleteReviews(DetailMovieReviewModel reviewsModels) {
-        List<ReviewsModel> reviewModel;
-        if (reviewsModels.getResults().size() == 0) {
-            reviewModel = new ArrayList<>();
-            ReviewsModel tempModel = new ReviewsModel("", "\n\n\nNo One Reviewed Yet\n\n\n", null, null);
-            reviewModel.add(tempModel);
-        } else {
-            reviewModel = reviewsModels.getResults();
-        }
-        mReviewsAdapter.setReviews(reviewModel);
-        loadingReviews.smoothToHide();
     }
 }

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/favourite_bottom_detail"
-        android:title="Sort By Rating"
+        android:title="@string/FAVOURITE_BOTTOM"
         app:showAsAction="always"
         android:icon="@drawable/ic_favourite_heart_fillled_red"
         />

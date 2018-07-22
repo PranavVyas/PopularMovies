@@ -1,14 +1,10 @@
 package com.pro.vyas.pranav.popularmovies;
 
-import android.app.usage.NetworkStatsManager;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.arch.persistence.room.Delete;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.icu.text.RelativeDateTimeFormatter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -24,7 +20,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +30,9 @@ import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadVideosAsyncTask;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieDatabase;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieEntry;
 import com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView;
-import com.pro.vyas.pranav.popularmovies.extraUtils.ChipPro;
+import com.pro.vyas.pranav.popularmovies.extraUtils.AppExecutors;
 import com.pro.vyas.pranav.popularmovies.models.DetailMovieModel;
 import com.pro.vyas.pranav.popularmovies.models.DetailMovieReviewModel;
-import com.pro.vyas.pranav.popularmovies.models.MainDetailsMovieModel;
 import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.models.ReviewsModel;
 import com.pro.vyas.pranav.popularmovies.models.VideosModel;
@@ -46,23 +40,19 @@ import com.pro.vyas.pranav.popularmovies.recyclerUtils.ReviewsAdapter;
 import com.pro.vyas.pranav.popularmovies.recyclerUtils.TrailerAdapter;
 import com.pro.vyas.pranav.popularmovies.viewModelUtils.FavouriteMovieViewModelFactory;
 import com.pro.vyas.pranav.popularmovies.viewModelUtils.OneAtTimeFavouriteMovieViewModel;
-import com.robertlevonyan.views.chip.Chip;
 import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.baseUrlPoster;
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.baseUrlPosterBackground;
-import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.youtubeBaseUrl;
 
 public class DetailActivity extends AppCompatActivity implements LoadVideosAsyncTask.LoadTrailerAsyncTaskCallback, LoadReviewsAsyncTask.LoadReviewsCallBack {
 
@@ -110,6 +100,7 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
     private MovieDatabase mDb;
     private TrailerAdapter mTrailerAdapter;
     private ReviewsAdapter mReviewsAdapter;
+    private AppExecutors mExecutors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +143,7 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
         rvReviews.setLayoutManager(layoutManager1);
         rvReviews.setAdapter(mReviewsAdapter);
         mDb = MovieDatabase.getInstance(DetailActivity.this);
+        mExecutors = AppExecutors.getInstance();
     }
 
     private void loadTrailers(String movieId) {
@@ -203,9 +195,9 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
         if (intent.hasExtra("MovieJSONString")) {
             Gson gson = new Gson();
             MovieModel model = gson.fromJson(intent.getStringExtra("MovieJSONString"), MovieModel.class);
-            tvRating.setText("IMDB Rating :\n" + model.getVote_average());
+            tvRating.setText(new StringBuilder().append("IMDB Rating :\n").append(model.getVote_average()).toString());
             tvRelease.setText(model.getRelease_date());
-            tvTotalVotes.setText("Total Votes :\n" + model.getVote_count());
+            tvTotalVotes.setText(new StringBuilder().append("Total Votes :\n").append(model.getVote_count()).toString());
             tvTitle.setText(model.getTitle());
             tvSynopsis.setText(model.getOverview());
             Picasso.get()
@@ -259,20 +251,21 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
     }
 
     private boolean checkNetwork() {
-        boolean flag;
+        boolean flag = false;
         ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
-                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            flag = true;
-            Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
-        } else if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED
-                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
-            flag = false;
-            Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show();
-        } else {
-            flag = false;
+        if (conMgr != null) {
+            if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
+                    || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                flag = true;
+                Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show();
+            } else if (conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED
+                    || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
+                flag = false;
+                Toast.makeText(this, "Not Connected", Toast.LENGTH_SHORT).show();
+            } else {
+                flag = false;
+            }
         }
-
         return flag;
     }
 
@@ -324,18 +317,39 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
 //        }
 //    }
 
-    public void addTofavourites(MovieModel movie) {
+    public void addTofavourites(final MovieModel movie) {
         isAdded = true;
-        MovieEntry movieToAdd = new MovieEntry(movie);
-        mDb.movieDao().insertMovie(movieToAdd);
-        Toast.makeText(this, "Sucessfully added to favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                MovieEntry movieToAdd = new MovieEntry(movie);
+                mDb.movieDao().insertMovie(movieToAdd);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DetailActivity.this, "Sucessfully added to favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
     }
 
-    public void removeFromFavourite(MovieModel movie) {
+    public void removeFromFavourite(final MovieModel movie) {
         isAdded = false;
-        MovieEntry movieToDelete = new MovieEntry(movie);
-        mDb.movieDao().deleteMovie(movieToDelete);
-        Toast.makeText(this, "Sucessfully removed from Favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                MovieEntry movieToDelete = new MovieEntry(movie);
+                mDb.movieDao().deleteMovie(movieToDelete);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(DetailActivity.this, "Sucessfully removed from Favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     private void checkAlreadyFavourite() {

@@ -7,9 +7,7 @@ import android.os.Bundle;
 
 import com.pro.vyas.pranav.popularmovies.MainActivity;
 import com.pro.vyas.pranav.popularmovies.R;
-import com.wang.avi.AVLoadingIndicatorView;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.SPLASH_TIME_OUT;

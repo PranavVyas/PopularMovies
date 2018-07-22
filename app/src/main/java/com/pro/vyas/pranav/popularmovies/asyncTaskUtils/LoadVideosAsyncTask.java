@@ -3,21 +3,13 @@ package com.pro.vyas.pranav.popularmovies.asyncTaskUtils;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
-import com.google.gson.Gson;
-import com.nex3z.flowlayout.FlowLayout;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.pro.vyas.pranav.popularmovies.models.DetailMovieModel;
-import com.pro.vyas.pranav.popularmovies.models.MainDetailsMovieModel;
 import com.pro.vyas.pranav.popularmovies.models.VideosModel;
-import com.wang.avi.AVLoadingIndicatorView;
-import com.wang.avi.Indicator;
-
-import org.json.JSONObject;
 
 import java.util.List;
 
@@ -61,12 +53,6 @@ public class LoadVideosAsyncTask extends AsyncTask<Void, Void, DetailMovieModel>
             Log.d(TAG, "onPostExecute: Movie Trailer is " + videos.get(i).getKey());
         }
         return movieForVideos;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-
     }
 
     @Override

@@ -3,20 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
     android:id="@+id/sort_by_menu"
-    android:title="Sort By"
+    android:title="@string/SORT_MENU_MAIN"
     app:showAsAction="ifRoom"
     android:icon="@drawable/ic_sort_by"
     />
 
     <item
         android:id="@+id/favourites_menu"
-        android:title="Favourites"
+        android:title="@string/FAVOURITE_MENU_MAIN"
         app:showAsAction="always"
         android:icon="@drawable/ic_unfavourite_heart_filled_red" />
 
     <item
         android:id="@+id/refresh_menu"
-        android:title="Refresh"
+        android:title="@string/REFRESH_MENU_MAIN"
         app:showAsAction="always"
         android:icon="@drawable/ic_loading"/>
 </menu>

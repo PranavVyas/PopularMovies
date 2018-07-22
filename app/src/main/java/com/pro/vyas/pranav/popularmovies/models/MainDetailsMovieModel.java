@@ -1,7 +1,5 @@
 package com.pro.vyas.pranav.popularmovies.models;
 
-import com.pro.vyas.pranav.popularmovies.DetailActivity;
-
 public class MainDetailsMovieModel {
     DetailMovieModel videos;
 

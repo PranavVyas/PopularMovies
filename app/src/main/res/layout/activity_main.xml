@@ -21,11 +21,10 @@
         app:layout_constraintTop_toTopOf="parent" >
 
         <TextView
-            android:id="@+id/text_toolbar_title_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="@font/croissant_one"
-            android:text="MovieMania"
+            android:text="@string/APP_NAME"
             android:textColor="@color/textWhite"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -106,7 +105,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:fontFamily="@font/roboto_bold"
-        android:text="Please Wait...\n Fetching Data from Internet..."
+        android:text="@string/TEXT_FETCHING_DATA_MAIN"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -132,7 +131,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="8dp"
-            android:text="Please Wait ...."
+            android:text="@string/PLEASE_WAIT"
             android:textAlignment="center"
             android:textColor="@color/cardview_dark_background"
             android:textSize="14sp"/>

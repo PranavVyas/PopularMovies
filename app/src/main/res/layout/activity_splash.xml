@@ -8,14 +8,13 @@
     tools:context=".extraUtils.SplashActivity">
 
     <TextView
-        android:id="@+id/textView2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="54dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/croissant_one"
-        android:text="Welcome to\nMovie-Mania "
+        android:text="@string/TEXT_INTRO_SPLASH"
         android:textAlignment="center"
         android:textColor="@color/colorBlack"
         android:textSize="30sp"
@@ -25,7 +24,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:contentDescription="Image for SplashActivity"
+        android:contentDescription="@string/IMAGE_INFO_SPLASH"
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"

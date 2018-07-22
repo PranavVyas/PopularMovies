@@ -2,19 +2,15 @@ package com.pro.vyas.pranav.popularmovies.recyclerUtils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pro.vyas.pranav.popularmovies.DetailActivity;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView;
 import com.pro.vyas.pranav.popularmovies.models.VideosModel;
@@ -22,8 +18,6 @@ import com.squareup.picasso.Picasso;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.List;
-
-import butterknife.OnClick;
 
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.youtubeBaseUrl;
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.youtubeThumbnailUrl;
@@ -53,7 +47,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.trailerH
     public void onBindViewHolder(@NonNull trailerHolder holder, int position) {
         if (trailerList == null) {
             holder.loadingView.smoothToShow();
-            holder.tvTitle.setText("Please Wait...");
+            holder.tvTitle.setText(R.string.PLEASE_WAIT);
             holder.ivTrailerThumbnail.setVisibility(View.INVISIBLE);
         } else {
             holder.loadingView.hide();
@@ -111,7 +105,7 @@ public class TrailerAdapter extends RecyclerView.Adapter<TrailerAdapter.trailerH
         AVLoadingIndicatorView loadingView;
         ImageView ivShare;
 
-        public trailerHolder(View itemView) {
+        trailerHolder(View itemView) {
             super(itemView);
             ivTrailerThumbnail = itemView.findViewById(R.id.recycler_image_trailer);
             tvTitle = itemView.findViewById(R.id.recycler_title_trailer);

@@ -1,11 +1,9 @@
 package com.pro.vyas.pranav.popularmovies;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -15,10 +13,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieDatabase;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieEntry;
-import com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView;
-import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.recyclerUtils.FavouriteMovieAdapter;
 import com.pro.vyas.pranav.popularmovies.viewModelUtils.MainFavouriteMovieViewModel;
 
@@ -58,7 +53,7 @@ public class FavoritesActivity extends AppCompatActivity {
         rvFavourites.setAdapter(mAdapter);
         rvFavourites.setHasFixedSize(true);
         rvFavourites.setLayoutManager(layoutManager);
-        tvToolbar.setText("Favourites Movies");
+        tvToolbar.setText(R.string.TEXT_DEFAULT_TOOLBAR_FAVOURITE);
         retriveData();
     }
 

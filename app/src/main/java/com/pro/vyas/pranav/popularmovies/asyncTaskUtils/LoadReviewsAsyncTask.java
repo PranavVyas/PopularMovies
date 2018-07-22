@@ -10,8 +10,6 @@ import com.androidnetworking.common.ANResponse;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.pro.vyas.pranav.popularmovies.models.DetailMovieReviewModel;
 
-import java.util.List;
-
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.videoLoadBaseUrl;
 
 public class LoadReviewsAsyncTask extends AsyncTask<Void,Void,DetailMovieReviewModel> {

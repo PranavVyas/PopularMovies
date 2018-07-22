@@ -6,26 +6,18 @@
     <color name="colorPrimaryLight">#BBDEFB</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorPrimary_text">#212121</color>
-    <color name="colorSecondary_text">#757575</color>
-    <color name="colorIcons">#FFFFFF</color>
     <color name="colorDivider">#BDBDBD</color>
 
     <color name="colorYello">#ffff00</color>
-    <color name="colorRed">#ff0000</color>
-    <color name="colorSkyBlue">#00ffff</color>
     <color name="colorBlue">#0000ff</color>
-    <color name="colorGreen">#00ff00</color>
     <color name="colorBlack">#000000</color>
-    <color name="partialTransparent">#50ffffff</color>
     <color name="colorWhite">#ffffff</color>
-    <color name="colorGray">#8c8c8c</color>
 
     <color name="textBlack">#000000</color>
     <color name="textDarkBlue">#311b92</color>
     <color name="textWhite">#ffffff</color>
     <color name="colorAccentIntro">#ea80fc</color>
     <color name="colorBlackIntro">#75000000</color>
-    <color name="colorGreenIntro">#7576ff03</color>
     <color name="colorSkyBlueIntro">#758c9eff</color>
     <color name="colorRedIntro">#75d50000</color>
 

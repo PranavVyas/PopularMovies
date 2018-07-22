@@ -31,9 +31,9 @@ public class ReviewsAdapter extends RecyclerView.Adapter<ReviewsAdapter.ReviewHo
     @Override
     public void onBindViewHolder(@NonNull ReviewHolder holder, int position) {
         if(reviews == null){
-            holder.tvContent.setText("\n\n\n\nPLease Wait Fetching Details\n\n\n\n");
+            holder.tvContent.setText(R.string.TEXT_REVIEW_DEFAULT_WAIT_DETAIL);
         }else{
-            holder.tvName.setText("-"+reviews.get(position).getAuthor());
+            holder.tvName.setText(new StringBuilder().append("-").append(reviews.get(position).getAuthor()).toString());
             holder.tvContent.setText(reviews.get(position).getContent());
         }
     }

@@ -19,6 +19,7 @@ public class FavouriteMovieViewModelFactory extends ViewModelProvider.NewInstanc
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
+        //noinspection unchecked
         return (T) new OneAtTimeFavouriteMovieViewModel(mDb,mId);
     }
 }

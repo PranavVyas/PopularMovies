@@ -38,7 +38,6 @@ public class AlwaysMarqueeTextView extends android.support.v7.widget.AppCompatTe
     @Override
     protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         if (focused)
-
             super.onFocusChanged(focused, direction, previouslyFocusedRect);
     }
 

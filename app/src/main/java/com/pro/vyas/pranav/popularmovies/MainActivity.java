@@ -1,11 +1,11 @@
 package com.pro.vyas.pranav.popularmovies;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -15,8 +15,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,7 +27,11 @@ import android.widget.Toast;
 import com.androidnetworking.AndroidNetworking;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
-import com.getkeepsafe.taptargetview.TapTargetView;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
@@ -44,17 +46,14 @@ import com.oguzdev.circularfloatingactionmenu.library.FloatingActionMenu;
 import com.oguzdev.circularfloatingactionmenu.library.SubActionButton;
 import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadMasterGenreAsyncTask;
 import com.pro.vyas.pranav.popularmovies.asyncTaskUtils.LoadMovieAsyncTask;
-import com.pro.vyas.pranav.popularmovies.extraUtils.SplashActivity;
 import com.pro.vyas.pranav.popularmovies.models.GenreModel;
 import com.pro.vyas.pranav.popularmovies.models.MainModel;
 import com.pro.vyas.pranav.popularmovies.models.MovieModel;
 import com.pro.vyas.pranav.popularmovies.prefencesUtils.SharedPrefenceUtils;
 import com.pro.vyas.pranav.popularmovies.recyclerUtils.MovieAdapter;
-import com.pro.vyas.pranav.popularmovies.viewModelUtils.MainFavouriteMovieViewModel;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -96,20 +95,46 @@ public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTas
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
+        Dexter.withActivity(this)
+                .withPermissions(
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE)
+                .withListener(new MultiplePermissionsListener() {
+                    @Override
+                    public void onPermissionsChecked(MultiplePermissionsReport report) {
+                        // check if all permissions are granted
+                        if (report.areAllPermissionsGranted()) {
+                            preLoadItems();
+                        }
+
+                        // check for permanent denial of any permission
+                        if (report.isAnyPermissionPermanentlyDenied()) {
+                            // permission is denied permenantly, navigate user to app settings
+                            AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                            dialog.setTitle("Not Given Permissions");
+                            dialog.setMessage("We want permission to acess your Netwok state \nand Internet ");
+                        }
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
+                        token.continuePermissionRequest();
+                    }
+                })
+                .onSameThread()
+                .check();
+    }
+
+    private void preLoadItems() {
         AndroidNetworking.initialize(getApplicationContext());
         mainPrefs = getSharedPreferences("firsttimePrefs", Context.MODE_PRIVATE);
         setSupportActionBar(toolbarMain);
         Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
-        preLoadItems();
         currPage = 1;
         fetchDataFromUrl("1");
         buildDrawer(MainActivity.this, toolbarMain, getSupportActionBar());
         attachFloatingActionMenu();
-    }
-
-    private void preLoadItems() {
         ivNoConnection.setVisibility(View.GONE);
         adapter = new MovieAdapter(this);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, this.getResources().getConfiguration().orientation == ORIENTATION_PORTRAIT ? 2 : 3);
@@ -185,10 +210,10 @@ public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTas
         final SharedPrefenceUtils sharedPrefenceUtils = new SharedPrefenceUtils(mainPrefs);
 
         if (sharedPrefenceUtils.isFirstTimeRun()) {
-            Display display = getWindowManager().getDefaultDisplay();
-            Drawable iconNext = this.getResources().getDrawable(R.drawable.ic_arrow_right);
-            Rect rect1 = new Rect(0, 0, iconNext.getIntrinsicWidth() * 2, iconNext.getIntrinsicHeight() * 2);
-            rect1.offset(display.getWidth() / 2, display.getHeight() / 2);
+            //Display display = getWindowManager().getDefaultDisplay();
+            //Drawable iconNext = this.getResources().getDrawable(R.drawable.ic_arrow_right);
+            //Rect rect1 = new Rect(0, 0, iconNext.getIntrinsicWidth() * 2, iconNext.getIntrinsicHeight() * 2);
+            //rect1.offset(display.getWidth() / 2, display.getHeight() / 2);
             final TapTarget target1 = TapTarget.forView(actionButton, INTRO_TITLE_ACTION_BUTTON, INTRO_DETAIL_ACTION_BUTTON);
             TapTarget target2 = TapTarget.forView(backBtn, INTRO_TITLE_BACK_BUTTON, INTRO_DETAIL_BACK_BUTTON).outerCircleColor(R.color.colorAccentIntro).tintTarget(false);
             TapTarget target3 = TapTarget.forView(nextBtn, INTRO_TITLE_NEXT_BUTTON, INTRO_DETAIL_NEXT_BUTTON).outerCircleColor(R.color.colorYello).textColor(R.color.colorBlackIntro).textColor(R.color.colorBlack).tintTarget(false);
@@ -255,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTas
     }
 
     private void refreshPage() {
-        tvData.setText("Refreshing...");
+        tvData.setText(R.string.REFRESHING);
         ivNoConnection.setVisibility(View.GONE);
         fetchDataFromUrl((String.valueOf(currPage)));
     }
@@ -294,8 +319,8 @@ public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTas
 
     public void buildDrawer(final Activity context, Toolbar toolbar, final ActionBar actionbar) {
         new DrawerBuilder().withActivity(context).build();
-        final PrimaryDrawerItem favouriteDrawer = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_favorites);
-        final PrimaryDrawerItem aboutDrawer = new PrimaryDrawerItem().withIdentifier(2).withName("About this App");
+        final PrimaryDrawerItem favouriteDrawer = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_favorites).withSelectable(false);
+        final PrimaryDrawerItem aboutDrawer = new PrimaryDrawerItem().withIdentifier(2).withName("About this App").withSelectable(false);
         favouriteDrawer.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
             @Override
             public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
@@ -336,7 +361,10 @@ public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTas
                 .withActionBarDrawerToggleAnimated(true)
                 .addDrawerItems(
                         favouriteDrawer,
-                        aboutDrawer
+                        aboutDrawer,
+                        new DividerDrawerItem()
+                )
+                .withSelectedItemByPosition(3
                 )
                 .build();
 //        drawer.setOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
@@ -429,8 +457,8 @@ public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTas
         } else {
             Snackbar sbar = Snackbar.make(tvData, "Network Unavailable", Snackbar.LENGTH_LONG);
             sbar.show();
-            tvData.setText("No Internet Connection!");
-            tvProgress.setText("No Connection Available \nPlease Connect to Internet");
+            tvData.setText(R.string.NO_INTERNET_TITLE);
+            tvProgress.setText(R.string.NO_INTERNET_DETAIL);
             loadingIndicatorView.smoothToHide();
             ivNoConnection.setVisibility(View.VISIBLE);
             ivBackgroundProgress.setVisibility(View.VISIBLE);
@@ -440,11 +468,11 @@ public class MainActivity extends AppCompatActivity implements LoadMovieAsyncTas
     }
 
     private String convertIdsToString(List<String> genre_id) {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < genre_id.size(); i++) {
-            result = result + genre_id.get(i) + ",";
+            result.append(genre_id.get(i)).append(",");
         }
-        return result;
+        return result.toString();
     }
 
     @Override

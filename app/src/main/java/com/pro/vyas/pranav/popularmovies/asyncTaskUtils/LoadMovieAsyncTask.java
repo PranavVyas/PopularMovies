@@ -6,13 +6,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.ANRequest;
 import com.androidnetworking.common.ANResponse;
 import com.androidnetworking.error.ANError;
-import com.pro.vyas.pranav.popularmovies.MainActivity;
 import com.pro.vyas.pranav.popularmovies.R;
 import com.pro.vyas.pranav.popularmovies.models.MainModel;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -76,7 +74,7 @@ public class LoadMovieAsyncTask extends AsyncTask<String, Void, MainModel> {
 
     private void showPregress() {
         bakgProgress.setVisibility(View.VISIBLE);
-        textProgress.setText("Please Wait...");
+        textProgress.setText(R.string.PLEASE_WAIT);
         textProgress.setVisibility(View.VISIBLE);
         loadingIndicatorView.smoothToShow();
     }

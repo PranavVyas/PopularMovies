@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:gravity="center"
-        android:text="No Favourites Added!\nPlease add some Movies first"
+        android:text="@string/ERROR_TEXT_FAVOURITE"
         android:textAlignment="center"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"

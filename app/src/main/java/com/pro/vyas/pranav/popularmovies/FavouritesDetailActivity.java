@@ -1,5 +1,4 @@
 package com.pro.vyas.pranav.popularmovies;
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -21,9 +20,8 @@ import com.nex3z.flowlayout.FlowLayout;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieDatabase;
 import com.pro.vyas.pranav.popularmovies.databaseUtils.MovieEntry;
 import com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView;
+import com.pro.vyas.pranav.popularmovies.extraUtils.AppExecutors;
 import com.pro.vyas.pranav.popularmovies.models.MovieModel;
-import com.pro.vyas.pranav.popularmovies.recyclerUtils.ReviewsAdapter;
-import com.pro.vyas.pranav.popularmovies.recyclerUtils.TrailerAdapter;
 import com.pro.vyas.pranav.popularmovies.viewModelUtils.FavouriteMovieViewModelFactory;
 import com.pro.vyas.pranav.popularmovies.viewModelUtils.OneAtTimeFavouriteMovieViewModel;
 import com.squareup.picasso.Picasso;
@@ -75,6 +73,7 @@ public class FavouritesDetailActivity extends AppCompatActivity {
     private Intent intent;
     private MovieModel modelForFavourite;
     private MovieDatabase mDb;
+    private AppExecutors mExecutors;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +105,7 @@ public class FavouritesDetailActivity extends AppCompatActivity {
         tvTitle.setAlwaysMarquee(true);
         tvToolbarTitleDetail.setAlwaysMarquee(true);
         mDb = MovieDatabase.getInstance(this);
+        mExecutors = AppExecutors.getInstance();
     }
 
     public void initBottomNavigationView(Intent intent) {
@@ -154,9 +154,9 @@ public class FavouritesDetailActivity extends AppCompatActivity {
         if (intent.hasExtra("MovieJSONString")) {
             Gson gson = new Gson();
             MovieModel model = gson.fromJson(intent.getStringExtra("MovieJSONString"), MovieModel.class);
-            tvRating.setText("IMDB Rating :\n" + model.getVote_average());
+            tvRating.setText(new StringBuilder().append("IMDB Rating :\n").append(model.getVote_average()).toString());
             tvRelease.setText(model.getRelease_date());
-            tvTotalVotes.setText("Total Votes :\n" + model.getVote_count());
+            tvTotalVotes.setText(new StringBuilder().append("Total Votes :\n").append(model.getVote_count()).toString());
             tvTitle.setText(model.getTitle());
             tvSynopsis.setText(model.getOverview());
             Picasso.get()
@@ -225,20 +225,56 @@ public class FavouritesDetailActivity extends AppCompatActivity {
 //            //btnAddFavourites.setBackground(this.getResources().getDrawable(R.drawable.button_unfavourite));
 //        }
 //    }
+//
+//    private void addTofavourites(MovieModel movie) {
+//        isAdded = true;
+//        MovieEntry movieToAdd = new MovieEntry(movie);
+//        mDb.movieDao().insertMovie(movieToAdd);
+//        Toast.makeText(this, "Sucessfully added to favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+//    }
+//
+//    private void removeFromFavourite(MovieModel movie) {
+//        isAdded = false;
+//        MovieEntry movieToDelete = new MovieEntry(movie);
+//        mDb.movieDao().deleteMovie(movieToDelete);
+//        Toast.makeText(this, "Sucessfully removed from Favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+//        finish();
+//    }
 
-    private void addTofavourites(MovieModel movie) {
+    public void addTofavourites(final MovieModel movie) {
         isAdded = true;
-        MovieEntry movieToAdd = new MovieEntry(movie);
-        mDb.movieDao().insertMovie(movieToAdd);
-        Toast.makeText(this, "Sucessfully added to favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                MovieEntry movieToAdd = new MovieEntry(movie);
+                mDb.movieDao().insertMovie(movieToAdd);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(FavouritesDetailActivity.this, "Sucessfully added to favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+
     }
 
-    private void removeFromFavourite(MovieModel movie) {
+    public void removeFromFavourite(final MovieModel movie) {
         isAdded = false;
-        MovieEntry movieToDelete = new MovieEntry(movie);
-        mDb.movieDao().deleteMovie(movieToDelete);
-        Toast.makeText(this, "Sucessfully removed from Favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
-        finish();
+        mExecutors.diskIO().execute(new Runnable() {
+            @Override
+            public void run() {
+                MovieEntry movieToDelete = new MovieEntry(movie);
+                mDb.movieDao().deleteMovie(movieToDelete);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(FavouritesDetailActivity.this, "Sucessfully removed from Favourites : " + movie.getTitle(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+                finish();
+            }
+        });
     }
 
     private void checkAlreadyFavourite() {

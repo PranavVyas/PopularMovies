@@ -7,7 +7,7 @@
     tools:context=".AboutAppActivity">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_detail2"
+        android:id="@+id/toolbar_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -20,10 +20,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.pro.vyas.pranav.popularmovies.extraUtils.AlwaysMarqueeTextView
-            android:id="@+id/text_toolbar_title_about"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="About App"
+            android:text="@string/TEXT_MAIN_ABOUT"
             android:textColor="@color/textWhite"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -39,7 +38,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="200dp"
         android:fontFamily="@font/croissant_one"
-        android:text="MovieMania"
+        android:text="@string/APP_NAME"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +53,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="serif"
-        android:text="MovieMania is an app to see the latest/Popular/Upcoming  movies' details. Reviews given on the website of TMDB and rating provided by IMDB gives clear Idea of what is your next movie going to be...Trailers are available to watch from youtube and share the trailer with friends"
+        android:text="@string/TEXT_DETAIL_ABOUT"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,11 +71,10 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Developed By : "
+            android:text="@string/TEXT_DEVELOPED_ABOUT"
             android:textAlignment="textEnd"
             android:textSize="18sp"
             tools:layout_editor_absoluteX="16dp"
@@ -87,7 +85,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Pranav Vyas"
+            android:text="@string/PRANAV_VYAS"
             android:textAlignment="textStart"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -104,22 +102,20 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
         <TextView
-            android:id="@+id/textView6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Email : "
+            android:text="@string/TEXT_EMAIL_ABOUT"
             android:textAlignment="textEnd"
             android:textSize="18sp"
             tools:layout_editor_absoluteX="40dp"
             tools:layout_editor_absoluteY="433dp" />
 
         <TextView
-            android:id="@+id/textView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="provyas4399@gmaill.com"
+            android:text="@string/DEFAULT_EMAIL_ABOUT"
             android:textAlignment="textStart"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -128,7 +124,6 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView3"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginEnd="8dp"
@@ -136,7 +131,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_detail2"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_about"
         app:srcCompat="@drawable/loading_new" />
 
 </android.support.constraint.ConstraintLayout>

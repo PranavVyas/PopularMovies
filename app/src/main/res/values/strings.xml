@@ -23,22 +23,25 @@
     <string name="TEXT_PAGE_NO">Enter Page No :</string>
     <string name="HINT_PAGE_NO_FAVOURITE">Enter Page No Here</string>
     <string name="APP_NAME">MovieMania</string>
-    <string name="TEXT_FETCHING_DATA_MAIN">Please Wait...  Fetching Data from Internet...</string>
+    <string name="TEXT_FETCHING_DATA_MAIN">Please Wait…  Fetching Data from Internet…</string>
     <string name="PLEASE_WAIT">Please Wait ....</string>
     <string name="TITLE_MOVIE_HOLDER">TextView Title Here</string>
     <string name="TEXT_MESSAGE_REVIEW">Reviews will apear here</string>
-    <string name="TEXT_AUTHER_REVIEW">Auther will apper here</string>
+    <string name="TEXT_AUTHER_REVIEW">Author will apper here</string>
     <string name="TEXT_MAIN_ABOUT">About App</string>
-    <string name="TEXT_DETAIL_ABOUT">MovieMania is an app to see the latest/Popular/Upcoming movies\' details. Reviews given on the website of TMDB and rating provided by IMDB gives clear Idea of what is your next movie going to be...Trailers are available to watch from youtube and share the trailer with friends</string>
+    <string name="TEXT_DETAIL_ABOUT">MovieMania is an app to see the latest/Popular/Upcoming movies\' details. Reviews given on the website of TMDB and rating provided by IMDB gives clear Idea of what is your next movie going to be…Trailers are available to watch from youtube and share the trailer with friends</string>
     <string name="TEXT_DEVELOPED_ABOUT">Developed By :</string>
     <string name="PRANAV_VYAS">Pranav Vyas</string>
     <string name="TEXT_EMAIL_ABOUT">Email :</string>
     <string name="DEFAULT_EMAIL_ABOUT">provyas4399@gmaill.com</string>
     <string name="TEXT_REVIEW_DEFAULT_WAIT_DETAIL">PLease Wait Fetching Details</string>
     <string name="TEXT_DEFAULT_TOOLBAR_FAVOURITE">Favourites Movies</string>
-    <string name="REFRESHING">Refreshing...</string>
+    <string name="REFRESHING">Refreshing…</string>
     <string name="NO_INTERNET_TITLE">No Internet Connection!</string>
     <string name="NO_INTERNET_DETAIL">No Connection Available  Please Connect to Internet</string>
+    <string name="TEXT_MORE_REVIEW_RECYCLER">More…</string>
+    <string name="TEXT_READ_MORE">Read More…</string>
+    <string name="TEXT_READ_LESS">Read Less…</string>
 
 
 </resources>

@@ -89,6 +89,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:scaleType="fitXY"
+                android:transitionName="Movie_Poster"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image_backdrop_detail"
                 app:srcCompat="@color/colorAccent" />
@@ -100,6 +101,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:transitionName="MovieTitle"
                 android:text="@string/TEXT_TITLE_DETAIL"
                 android:textAlignment="center"
                 android:textColor="@color/textBlack"
@@ -286,7 +288,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_reviews_detail"
                 android:layout_width="0dp"
-                android:layout_height="225dp"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"

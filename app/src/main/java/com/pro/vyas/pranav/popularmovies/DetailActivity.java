@@ -139,7 +139,7 @@ public class DetailActivity extends AppCompatActivity implements LoadVideosAsync
         rvTrailer.setAdapter(mTrailerAdapter);
         mReviewsAdapter = new ReviewsAdapter(this);
         LinearLayoutManager layoutManager1 = new LinearLayoutManager(this);
-        layoutManager1.setOrientation(LinearLayoutManager.VERTICAL);
+        layoutManager1.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvReviews.setLayoutManager(layoutManager1);
         rvReviews.setAdapter(mReviewsAdapter);
         mDb = MovieDatabase.getInstance(DetailActivity.this);

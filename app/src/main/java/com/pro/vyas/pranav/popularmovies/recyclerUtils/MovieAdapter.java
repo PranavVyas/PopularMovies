@@ -1,8 +1,15 @@
 package com.pro.vyas.pranav.popularmovies.recyclerUtils;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
+import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.nex3z.flowlayout.FlowLayout;
@@ -19,6 +27,7 @@ import com.pro.vyas.pranav.popularmovies.R;
 import com.robertlevonyan.views.chip.Chip;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.pro.vyas.pranav.popularmovies.constantUtils.Constants.*;
@@ -41,7 +50,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MovieHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MovieHolder holder, int position) {
         holder.tvTitle.setText(movie.get(position).getTitle());
 
         Picasso.get()
@@ -66,8 +75,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieHolder>
             public void onClick(View v) {
                 Intent intent = new Intent(ct, DetailActivity.class);
                 Gson gson = new Gson();
+                Bundle bundle = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    Pair<View, String>[] sharedElements = new Pair[]{
+                      new Pair(holder.ivPoster,holder.ivPoster.getTransitionName()),new Pair(holder.tvTitle,holder.tvTitle.getTransitionName())
+                    };
+                    bundle = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) ct,sharedElements).toBundle();
+                    Toast.makeText(ct, "Toasted", Toast.LENGTH_LONG).show();
+                }
                 intent.putExtra("MovieJSONString", gson.toJson(movie.get(pos)));
-                ct.startActivity(intent);
+                ct.startActivity(intent, bundle);
             }
         };
 

@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="API_KEY_TMDB"></string>
+    <string name="API_KEY_TMDB"><!--TODO Put key here--></string>
 </resources>

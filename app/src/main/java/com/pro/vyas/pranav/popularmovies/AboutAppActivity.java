@@ -20,16 +20,16 @@ public class AboutAppActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbarAbout);
         ActionBar actionBar = getSupportActionBar();
-    //    if (actionBar != null) {
-     //       actionBar.setDisplayHomeAsUpEnabled(true);
-     //       actionBar.setDisplayShowTitleEnabled(false);
-      //  }
-        if (actionBar == null) {
+    if (actionBar != null) {
+        actionBar.setDisplayHomeAsUpEnable);
+  actionBar.setDisplayShowTitleEnabled(false);
+       }
 
-            actionBar.setDisplayHomeAsUpEnabled(true);
 
-            actionBar.setDisplayShowTitleEnabled(false);
 
-        }
+
+
+
+
     }
 }
